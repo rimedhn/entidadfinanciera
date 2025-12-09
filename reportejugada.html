@@ -420,7 +420,7 @@
         }
         document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
-        document.getElementById("usuario").textContent = jugada.USUARIO || jugada.usuario || "";
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || "";
         document.getElementById("observaciones").textContent = jugada.OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
         renderBarcode(jugadaID);
