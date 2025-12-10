@@ -316,7 +316,7 @@
       <span id="fechaimpresion"></span>
     </div>
     <div id="nodata" class="no-data" style="display:none;">
-      No se encontró información activa para esta jugada.
+      No se encontró información activa para esta jugada o no pertenece al usuario actual.
     </div>
   </div>
   <script>
@@ -397,40 +397,98 @@
       });
     }
 
+    function equalsUser(a, b) {
+      if (!a && !b) return true;
+      return ('' + (a || '')).toString().trim().toLowerCase() === ('' + (b || '')).toString().trim().toLowerCase();
+    }
+
     function cargarJugada() {
       document.getElementById("loadingMsg").style.display = "block";
       document.getElementById("jugadaCarta").style.display = "none";
       document.getElementById("printBtn").style.display = "none";
       document.getElementById("nodata").style.display = "none";
+
+      // Optional explicit user param
+      var paramUsuario = getQueryParam("usuario") || getQueryParam("user") || getQueryParam("u");
+
       if (!jugadaID) {
-        document.getElementById("nodata").style.display = "block";
-        document.getElementById("loadingMsg").style.display = "none";
-        return;
+        // When no id provided, we need usuario param to show data (can't infer)
+        if (!paramUsuario) {
+          document.getElementById("nodata").textContent = "Proporcione el parámetro ?id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte.";
+          document.getElementById("nodata").style.display = "block";
+          document.getElementById("loadingMsg").style.display = "none";
+          return;
+        }
       }
+
       Promise.all([
         fetch(opensheetUrlJugada).then(resp => resp.json()),
         fetch(opensheetUrlDetalle).then(resp => resp.json())
       ])
       .then(([jugadas, detalles]) => {
-        var jugada = jugadas.find(j => (j.ID == jugadaID || j.id == jugadaID) && (j.ESTADO == "ACTIVO" || j.estado == "ACTIVO"));
+        // first find the jugada by id (without user filtering), to be able to infer user if needed
+        var jugada = null;
+        if (jugadaID) {
+          jugada = jugadas.find(j => (j.ID == jugadaID || j.id == jugadaID));
+        } else {
+          // No id: cannot continue (we required usuario param above), but keep for safety
+          jugada = null;
+        }
+
         if (!jugada) {
+          document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
           document.getElementById("nodata").style.display = "block";
           document.getElementById("loadingMsg").style.display = "none";
           return;
         }
+
+        // Determine current user: prefer explicit param, otherwise infer from jugada fields
+        var inferredUser = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
+        var currentUser = paramUsuario || inferredUser;
+
+        if (!currentUser) {
+          document.getElementById("nodata").textContent = "No se pudo determinar el usuario actual. Use ?usuario=<USUARIO> en la URL.";
+          document.getElementById("nodata").style.display = "block";
+          document.getElementById("loadingMsg").style.display = "none";
+          return;
+        }
+
+        // Verify that the jugada belongs to the currentUser (if paramUsuario provided enforce it)
+        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
+        if (paramUsuario) {
+          if (!equalsUser(jugadaUserField, currentUser)) {
+            document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
+            document.getElementById("nodata").style.display = "block";
+            document.getElementById("loadingMsg").style.display = "none";
+            return;
+          }
+        } else {
+          // if no param provided, we already inferred currentUser from jugada so proceed
+        }
+
+        // Populate header fields from jugada
         document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
-        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || "";
+        // Prefer explicit display name field if exists
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
         document.getElementById("observaciones").textContent = jugada.OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
         renderBarcode(jugadaID);
 
         var jugadaKey = (jugada.FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
+
+        // Filter detalles requiring:
+        // - estado ACTIVO
+        // - matching fecha+JUEGA (same key)
+        // - USUARIO (or usuario) equals currentUser
         var detallesFiltrados = detalles.filter(d => {
           var dFecha = d.FECHA || d.fecha || "";
           var dJuega = d.JUEGA || d.juega || "";
           var estado = d.ESTADO || d.estado || "";
-          return estado === "ACTIVO" && (dFecha + dJuega === jugadaKey);
+          var dUsuario = d.USUARIO || d.usuario || "";
+          var keyMatches = (dFecha + dJuega) === jugadaKey;
+          var userMatches = equalsUser(dUsuario, currentUser);
+          return estado === "ACTIVO" && keyMatches && userMatches;
         });
 
         detallesFiltrados.sort(function(a, b){
@@ -439,7 +497,7 @@
           var nA = parseInt(numA, 10);
           var nB = parseInt(numB, 10);
           if(!isNaN(nA) && !isNaN(nB)) return nA - nB;
-          return numA.localeCompare(numB, 'es', {numeric:true, sensitivity:'base'});
+          return (''+numA).localeCompare((''+numB), 'es', {numeric:true, sensitivity:'base'});
         });
 
         var totalNumeros = detallesFiltrados.length;
@@ -474,6 +532,15 @@
             '</div></div>';
           pagesContainer.appendChild(pageDiv);
         });
+
+        if (detallesFiltrados.length === 0) {
+          document.getElementById("nodata").textContent = "No se encontraron detalles activos para esta jugada y usuario.";
+          document.getElementById("nodata").style.display = "block";
+          document.getElementById("jugadaCarta").style.display = "block";
+          document.getElementById("loadingMsg").style.display = "none";
+          document.getElementById("printBtn").style.display = "none";
+          return;
+        }
 
         document.getElementById("jugadaCarta").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
@@ -545,3 +612,4 @@
   </script>
 </body>
 </html>
+```
