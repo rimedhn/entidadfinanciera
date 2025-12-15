@@ -49,13 +49,13 @@
       }
       #thermal-pos .amount {
         vertical-align: center;
-        text-align: right;
+        text-align: left;
         font-size: 4.2mm;
       }
 
       #thermal-pos .price {
         vertical-align: center;
-        text-align: center;
+        text-align: left;
         font-size: 4.2mm;
       }
 
@@ -71,7 +71,7 @@
         font-size: 4.2mm;
       }
 
-      #thermal-pos .Isv {
+      #thermal-pos . Isv {
         vertical-align: center;
         text-align: right;
         font-size: 4.2mm;
@@ -91,13 +91,13 @@
       }
       #thermal-pos .detail1 {
         margin-top: 5mm;
-        text-align:  right;
+        text-align: right;
         page-break-after: auto;
       }
 
       #thermal-pos .detail {
         margin-top: 5mm;
-        text-align:  left;
+        text-align: left;
         page-break-after: auto;
       }
 
@@ -126,12 +126,16 @@
       }
 
       /* Alineación específica para cada columna */
-      #thermal-pos .listitem .qty {
+      #thermal-pos . listitem .qty {
+        width: 10%;
+        text-align: left;
+      }
+
+      #thermal-pos .listitem . Price {
         width: 15%;
         text-align: left;
       }
 
-      #thermal-pos .listitem . Price,
       #thermal-pos .listitem .Desc,
       #thermal-pos .listitem .Isv {
         width: 20%;
@@ -139,12 +143,12 @@
       }
 
       #thermal-pos .listitem .Amount {
-        width: 25%;
-        text-align:  right;
+        width: 30%;
+        text-align: left;
       }
       
-      #thermal-pos .listitem .Premio {
-        width: 20%;
+      #thermal-pos .listitem . Premio {
+        width: 25%;
         text-align: center;
       }
     </style>
@@ -167,11 +171,11 @@
         </tr>
         <tr>
           <td class="informasi" style="width: 30%;">CLIENTE:</td>
-          <td class="informasi" style="width: 70%;" id="cliente"></td>
+          <td class="informasi" style="width:  70%;" id="cliente"></td>
         </tr>
         <tr>
           <td class="informasi" style="width: 30%;">CAJERO:</td>
-          <td class="informasi" style="width: 70%;" id="cajero"></td>
+          <td class="informasi" style="width:  70%;" id="cajero"></td>
         </tr>
       </table>
 
@@ -257,9 +261,9 @@
       var premios = getUrlParameter("premios").split(",");
 
       var productTable = document.getElementById("productTable");
-      for (var i = 0; i < descriptions. length; i++) {
+      for (var i = 0; i < descriptions.length; i++) {
         // Create a new row for the description
-        var descriptionRow = productTable.insertRow();
+        var descriptionRow = productTable. insertRow();
         descriptionRow.innerHTML = `
         <td colspan="4" class="descriptions">${descriptions[i]}</td>
     `;
