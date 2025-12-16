@@ -10,7 +10,7 @@
         box-shadow: 0 0 0mm #eee;
         margin: 0mm;
         max-width:  80mm;
-        line-height:   4mm;
+        line-height: 4mm;
       }
 
       #thermal-pos h2 {
@@ -19,21 +19,21 @@
       }
 
       #thermal-pos . label {
-        text-align:   center;
+        text-align:  center;
         font-size:  5mm;
-        line-height:  1.4;
+        line-height: 1.4;
       }
       
       #thermal-pos .informasi {
         vertical-align: text-top;
-        text-align:  left;
-        max-width:  45mm;
-        word-wrap: break-word;
+        text-align: left;
+        max-width: 45mm;
+        word-wrap:  break-word;
       }
 
-      #thermal-pos .  listitem {
-        font-size: 4mm;
-        height: 0mm;
+      #thermal-pos .listitem {
+        font-size:  4mm;
+        height:  0mm;
         text-align: center;
       }
       
@@ -43,10 +43,10 @@
       }
 
       #thermal-pos . item {
-        max-width:   80mm;
+        max-width:  80mm;
         font-size: 4.2mm;
-        word-wrap:  break-word;
-        width:  100%;
+        word-wrap: break-word;
+        width: 100%;
       }
       
       #thermal-pos .amount {
@@ -93,40 +93,41 @@
       }
       
       #thermal-pos .detail1 {
-        margin-top:  5mm;
+        margin-top: 5mm;
         text-align: right;
         page-break-after:  auto;
       }
 
-      #thermal-pos . detail {
-        margin-top:   5mm;
-        text-align:   left;
-        page-break-after: auto;
+      #thermal-pos .detail {
+        margin-top: 5mm;
+        text-align: left;
+        page-break-after:  auto;
       }
 
       #all {
-        font-family: Arial, sans-serif;
+        font-family:  Arial, sans-serif;
       }
 
       . mi-imagen {
-        width:   80px;
-        height:  80px;
+        width:  50px;
+        height: 50px;
         display: block;
         margin: 0 auto;
+        object-fit: contain;
       }
 
       #thermal-pos .descriptions {
         font-size: 4.2mm;
-        text-align:  left;
-        font-weight:   bold;
-        padding-top:  1px;
+        text-align: left;
+        font-weight: bold;
+        padding-top: 1px;
         padding-bottom: 1px;
       }
 
       /* Tabla de productos con anchos fijos */
       #productTable {
-        width:  100%;
-        table-layout: fixed;
+        width: 100%;
+        table-layout:  fixed;
       }
 
       /* Anchos específicos para columnas de datos */
@@ -151,7 +152,7 @@
         text-align: left;
         font-size: 4.2mm;
         word-wrap: break-word;
-        overflow-wrap:  break-word;
+        overflow-wrap: break-word;
       }
       
       #productTable td. Premio {
@@ -159,14 +160,14 @@
         text-align: center;
         font-size: 4.2mm;
         word-wrap: break-word;
-        overflow-wrap:   break-word;
+        overflow-wrap: break-word;
       }
     </style>
   </head>
   <body id="all">
     <div id="thermal-pos">
       <div class="label">
-        <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
+        <img src="https://raw.githubusercontent.com/rimedhn/entidadfinanciera/main/Entidad%20Financiera%20Logo. png" alt="Mi imagen" class="mi-imagen" /><br />
         <b>COMPROBANTE</b><br />               
       </div>
 
@@ -176,16 +177,16 @@
 
       <table>
         <tr>
-          <td class="informasi" style="width:   30%;">FECHA:</td>
+          <td class="informasi" style="width:  30%;">FECHA:</td>
           <td class="informasi" style="width: 70%;" id="fecha"></td>
         </tr>
         <tr>
           <td class="informasi" style="width: 30%;">CLIENTE:</td>
-          <td class="informasi" style="width:   70%;" id="cliente"></td>
+          <td class="informasi" style="width: 70%;" id="cliente"></td>
         </tr>
         <tr>
           <td class="informasi" style="width: 30%;">CAJERO:</td>
-          <td class="informasi" style="width:   70%;" id="cajero"></td>
+          <td class="informasi" style="width: 70%;" id="cajero"></td>
         </tr>
       </table>
 
@@ -246,12 +247,12 @@
         var results = regex.exec(location.search);
         return results === null
           ? ""
-          : decodeURIComponent(results[1].  replace(/\+/g, " "));
+          : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
 
       // Function to set text content of an element
       function setTextContent(id, value) {
-        document.  getElementById(id).textContent = value;
+        document.getElementById(id).textContent = value;
       }
 
       // Populate the receipt with data from URL parameters
@@ -271,17 +272,17 @@
       var amounts = getUrlParameter("amounts").split(",");
       var premios = getUrlParameter("premios").split(",");
 
-      var productTable = document.getElementById("productTable");
+      var productTable = document. getElementById("productTable");
       for (var i = 0; i < descriptions.length; i++) {
         // Create a new row for the description
-        var descriptionRow = productTable. insertRow();
+        var descriptionRow = productTable.insertRow();
         descriptionRow.innerHTML = `
         <td colspan="4" class="descriptions">${descriptions[i]}</td>
     `;
 
         // Create a new row for the other details
         var detailsRow = productTable.insertRow();
-        detailsRow.innerHTML = `
+        detailsRow. innerHTML = `
         <td class="qty">${quantitys[i]}</td>
         <td class="Price">${prices[i]}</td>
         <td class="Amount">${amounts[i]}</td>
@@ -293,7 +294,7 @@
       }      
 
       // Trigger print when the page loads
-      window. onload = function () {
+      window.onload = function () {
         window.print();
       };
     </script>
