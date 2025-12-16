@@ -9,7 +9,7 @@
       #thermal-pos {
         box-shadow: 0 0 0mm #eee;
         margin: 0mm;
-        max-width: 80mm;
+        max-width:  80mm;
         line-height:   4mm;
       }
 
@@ -26,12 +26,12 @@
       
       #thermal-pos .informasi {
         vertical-align: text-top;
-        text-align: left;
-        max-width: 45mm;
+        text-align:  left;
+        max-width:  45mm;
         word-wrap: break-word;
       }
 
-      #thermal-pos . listitem {
+      #thermal-pos .  listitem {
         font-size: 4mm;
         height: 0mm;
         text-align: center;
@@ -100,7 +100,7 @@
 
       #thermal-pos . detail {
         margin-top:   5mm;
-        text-align:  left;
+        text-align:   left;
         page-break-after: auto;
       }
 
@@ -109,8 +109,8 @@
       }
 
       . mi-imagen {
-        width:   150px;
-        height:  150px;
+        width:   80px;
+        height:  80px;
         display: block;
         margin: 0 auto;
       }
@@ -118,7 +118,7 @@
       #thermal-pos .descriptions {
         font-size: 4.2mm;
         text-align:  left;
-        font-weight:  bold;
+        font-weight:   bold;
         padding-top:  1px;
         padding-bottom: 1px;
       }
@@ -151,10 +151,10 @@
         text-align: left;
         font-size: 4.2mm;
         word-wrap: break-word;
-        overflow-wrap: break-word;
+        overflow-wrap:  break-word;
       }
       
-      #productTable td.Premio {
+      #productTable td. Premio {
         width: 30%;
         text-align: center;
         font-size: 4.2mm;
@@ -166,7 +166,7 @@
   <body id="all">
     <div id="thermal-pos">
       <div class="label">
-        <img src="https://raw.githubusercontent.com/rimedhn/entidadfinanciera/main/Entidad%20Financiera%20Logo.png" alt="Mi imagen" class="mi-imagen" /><br />
+        <img src="https://raw.githubusercontent.com/rimedhn/entidadfinanciera/main/Entidad%20Financiera%20Logo. png" alt="Mi imagen" class="mi-imagen" /><br />
         <b>COMPROBANTE</b><br />               
       </div>
 
@@ -176,7 +176,7 @@
 
       <table>
         <tr>
-          <td class="informasi" style="width:  30%;">FECHA:</td>
+          <td class="informasi" style="width:   30%;">FECHA:</td>
           <td class="informasi" style="width: 70%;" id="fecha"></td>
         </tr>
         <tr>
@@ -232,9 +232,9 @@
       </table>
 
       <div align="center">--------------------------------------------------------</div>
-      <div id="folio" style="text-align: center"></div>
+      <div id="folio" style="text-align:  center"></div>
       <div align="center">--------------------------------------------------------</div>
-      <div align="center">Gracias por su preferencia!!</div>
+      <div align="center">Gracias por su preferencia! !</div>
       <div align="center">--------------------------------------------------------</div>
     </div>
 
@@ -246,12 +246,12 @@
         var results = regex.exec(location.search);
         return results === null
           ? ""
-          : decodeURIComponent(results[1]. replace(/\+/g, " "));
+          : decodeURIComponent(results[1].  replace(/\+/g, " "));
       }
 
       // Function to set text content of an element
       function setTextContent(id, value) {
-        document. getElementById(id).textContent = value;
+        document.  getElementById(id).textContent = value;
       }
 
       // Populate the receipt with data from URL parameters
