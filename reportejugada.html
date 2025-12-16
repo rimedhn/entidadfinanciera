@@ -1,615 +1,364 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resumen de Jugada - Gestión de Números</title>
-  <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon">
-  <style>
-    @page {
-      size: letter;
-      margin: 0.7in 0.5in 1.1in 0.5in;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff;
-      margin: 0;
-      padding: 0;
-    }
-    .jugada-carta {
-      width: 8in;
-      margin: auto;
-      min-height: 10in;
-      background: #fff;
-      padding: 0;
-      position: relative;
-    }
-    #loadingMsg {
-      display: none;
-      text-align: center;
-      font-size: 1.25em;
-      color: #226;
-      margin: 24px 0;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .main-content {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-    }
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-    .header-left {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 53%;
-      min-width: 340px;
-      margin-top: 7px;
-    }
-    .logo-img {
-      width: 110px;
-      height: 110px;
-      object-fit: contain;
-      margin-right: 15px;
-      background: #fff;
-    }
-    .header-business {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .titulo-negocio {
-      font-size: 1.48em;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 3px;
-      margin-top: 7px;
-      word-break: break-word;
-    }
-    .resumen-label {
-      font-size: 1.08em;
-      color: #555;
-      margin-bottom: 0px;
-      margin-left: 1px;
-      font-weight: bold;
-      word-break: break-word;
-    }
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      width: 47%;
-      min-width: 200px;
-      margin-top: 7px;
-    }
-    .barcode-container {
-      text-align: right;
-      margin-bottom: 8px;
-    }
-    #barcode {
-      width: 160px !important;
-      height: 70px !important;
-      object-fit: contain;
-      display: block;
-      margin: 0 0 2px auto;
-    }
-    .codigo-jugada {
-      font-size: 0.95em;
-      color: #777;
-      margin-top: 0px;
-      text-align: right;
-      word-break: break-word;
-    }
-    .info-table {
-      width: 100%;
-      margin-bottom: 15px;
-      border-collapse: collapse;
-      font-size: 1.08em;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .info-table td {
-      padding: 7px 12px;
-      font-size: 1em;
-      border: none;
-      background: #fff;
-      vertical-align: top;
-    }
-    .info-label {
-      font-weight: bold;
-      color: #444;
-      width: 33%;
-      vertical-align: top;
-      padding-bottom: 3px;
-    }
-    .info-value {
-      font-size: 1em;
-      color: #222;
-      padding-bottom: 3px;
-    }
-    .detalle-section,
-    .detalle-page {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .detalle-title {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.15em;
-      margin: 2px 0 8px 0;
-      color: #444;
-      letter-spacing: 1px;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .detalle-grid-wrapper {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .detalle-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 14px;
-      margin-bottom: 14px;
-      width: 100%;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .detalle-card {
-      background: #fafafa;
-      border: 1px solid #eaeaea;
-      border-radius: 6px;
-      padding: 10px 10px 7px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      page-break-inside: avoid;
-      break-inside: avoid;
-      min-width: 0;
-      min-height: 60px;
-    }
-    .numero {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #266;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-    .valor {
-      font-size: 1.08em;
-      color: #444;
-      margin-bottom: 2px;
-      word-break: break-word;
-    }
-    .observaciones {
-      background: #f1f1f1;
-      padding: 9px 12px;
-      border-radius: 4px;
-      font-size: 1em;
-      color: #444;
-      margin-bottom: 8px;
-      margin-top: 10px;
-      width: 96%;
-      word-break: break-word;
-    }
-    .footer {
-      text-align: right;
-      font-size: 0.95em;
-      color: #888;
-      margin-top: 12px;
-    }
-    .no-data {
-      text-align: center;
-      color: #b00;
-      font-size: 1.05em;
-      margin-top: 10px;
-    }
-    #printBtn {
-      display: none;
-      margin: 18px auto 0 auto;
-      font-size: 1.1em;
-      padding: 8px 24px;
-      background: #226;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 6px #aaa2;
-    }
-    #printBtn:active {
-      background: #144;
-    }
-    @media print {
-      #printBtn, #loadingMsg {
-        display: none !important;
-      }
-      .jugada-carta {
-        background: #fff !important;
-        page-break-after: always;
-      }
-      .main-content, 
-      .info-table, 
-      .detalle-section, 
-      .detalle-page,
-      .detalle-title, 
-      .detalle-grid-wrapper, 
-      .detalle-grid, 
-      .detalle-card {
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-      .detalle-page {
-        page-break-before: always;
-        break-before: page;
-      }
-      .detalle-page.first {
-        page-break-before: auto !important;
-        break-before: auto !important;
-      }
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Jugadas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .error {
+            background-color: #fee;
+            color: #c33;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .number {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="loadingMsg">CARGANDO DATOS...</div>
-  <button id="printBtn">Exportar a PDF</button>
-  <div class="jugada-carta" id="jugadaCarta">
-    <div class="main-content">
-      <div class="header-row">
-        <div class="header-left">
-          <img class="logo-img" id="logoImg" src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Gestión de Números" />
-          <div class="header-business">
-            <div class="titulo-negocio">ENTIDAD FINANCIERA</div>
-            <div class="resumen-label">Resumen de Jugada</div>
-            <div class="resumen-label" id="referencia"></div>
-          </div>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Reporte de Jugadas</h1>
+            <p>Sistema de Análisis y Control</p>
         </div>
-        <div class="header-right">
-          <div class="barcode-container">
-            <svg id="barcode"></svg>
-          </div>
-          <div class="codigo-jugada">ID Jugada: <span id="idjugada"></span></div>
+
+        <div class="content">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="jugadaSelect">Seleccionar Jugada:</label>
+                    <select id="jugadaSelect">
+                        <option value="">Cargando jugadas...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="reportContent">
+                <div class="loading">Seleccione una jugada para ver el reporte...</div>
+            </div>
         </div>
-      </div>
-      <table class="info-table">
-        <tr>
-          <td class="info-label">Fecha</td>
-          <td class="info-label">Total Números</td>
-          <td class="info-label">Usuario</td>
-        </tr>
-        <tr>
-          <td class="info-value"><span id="fecha"></span></td>
-          <td class="info-value"><span id="totalNumeros"></span></td>
-          <td class="info-value"><span id="usuario"></span></td>
-        </tr>
-      </table>
-      <table class="info-table">
-        <tr>
-          <td class="info-label">Hora</td>
-          <td class="info-label">Total Venta</td>
-          <td class="info-label">Observaciones</td>
-        </tr>
-        <tr>
-          <td class="info-value"><span id="hora" ></span></td>
-          <td class="info-value"><span id="totalVenta" ></span></td>
-          <td class="info-value"><span id="observaciones" ></span></td>
-        </tr>
-      </table>
-      <div id="detallePagesContainer"></div>
     </div>
-    <div class="footer">
-      <span id="fechaimpresion"></span>
-    </div>
-    <div id="nodata" class="no-data" style="display:none;">
-      No se encontró información activa para esta jugada o no pertenece al usuario actual.
-    </div>
-  </div>
-  <script>
-    var opensheetUrlJugada = "https://opensheet.elk.sh/1QJgFNnXObYHWfe7PzrESwi4_YO3IZtzk2NToyO12bS8/JUGADA";
-    var opensheetUrlDetalle = "https://opensheet.elk.sh/1so5d-hNEr05ElnGZy6VnUUJ8IsKC8pgdCwIMkORflkw/DETALLE";
 
-    function getQueryParam(param) {
-      var urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-    var jugadaID = getQueryParam("id");
-    document.getElementById("idjugada").textContent = jugadaID || "";
+    <script>
+        // Data sources
+        const JUGADA_URL = 'https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/JUGADA';
+        const DETALLE_URL = 'https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/DETALLE';
+        const VENTAS_URL = 'https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/VENTAS';
 
-    var now = new Date();
-    document.querySelector(".footer #fechaimpresion").textContent =
-      "Impreso: " + now.toLocaleDateString() + " " + now.toLocaleTimeString();
+        let jugadasData = [];
+        let detallesData = [];
+        let ventasData = [];
+        let ventasMap = new Map(); // Efficient lookup for VENTAS by ID
 
-    function renderBarcode(id) {
-      JsBarcode("#barcode", id || "", {
-        format: "CODE128",
-        width: 2,
-        height: 90,
-        displayValue: false,
-        margin: 0,
-      });
-    }
-
-    function formatLempirasSinDecimales(num) {
-      if (isNaN(num)) return "L 0";
-      return "L " + Math.round(num).toLocaleString('es-HN', {maximumFractionDigits: 0});
-    }
-
-    function paginarDetalles(detalles, firstPage, nextPages) {
-      var result = [];
-      var start = 0;
-      if (detalles.length <= firstPage) {
-        result.push(detalles);
-      } else {
-        result.push(detalles.slice(0, firstPage));
-        start = firstPage;
-        while (start < detalles.length) {
-          result.push(detalles.slice(start, start + nextPages));
-          start += nextPages;
-        }
-      }
-      return result;
-    }
-
-    function toDataURL(url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-          callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-      };
-      xhr.onerror = function() {
-        callback(null);
-      };
-      xhr.open('GET', url);
-      xhr.responseType = 'blob';
-      xhr.send();
-    }
-
-    function prepareLogoForPDF(callback) {
-      var img = document.getElementById('logoImg');
-      var url = img.getAttribute('src');
-      if (url.startsWith('data:')) {
-        callback();
-        return;
-      }
-      toDataURL(url, function(dataUrl) {
-        if (dataUrl) {
-          img.setAttribute('src', dataUrl);
-        }
-        callback();
-      });
-    }
-
-    function equalsUser(a, b) {
-      if (!a && !b) return true;
-      return ('' + (a || '')).toString().trim().toLowerCase() === ('' + (b || '')).toString().trim().toLowerCase();
-    }
-
-    function cargarJugada() {
-      document.getElementById("loadingMsg").style.display = "block";
-      document.getElementById("jugadaCarta").style.display = "none";
-      document.getElementById("printBtn").style.display = "none";
-      document.getElementById("nodata").style.display = "none";
-
-      // Optional explicit user param
-      var paramUsuario = getQueryParam("usuario") || getQueryParam("user") || getQueryParam("u");
-
-      if (!jugadaID) {
-        // When no id provided, we need usuario param to show data (can't infer)
-        if (!paramUsuario) {
-          document.getElementById("nodata").textContent = "Proporcione el parámetro ?id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          return;
-        }
-      }
-
-      Promise.all([
-        fetch(opensheetUrlJugada).then(resp => resp.json()),
-        fetch(opensheetUrlDetalle).then(resp => resp.json())
-      ])
-      .then(([jugadas, detalles]) => {
-        // first find the jugada by id (without user filtering), to be able to infer user if needed
-        var jugada = null;
-        if (jugadaID) {
-          jugada = jugadas.find(j => (j.ID == jugadaID || j.id == jugadaID));
-        } else {
-          // No id: cannot continue (we required usuario param above), but keep for safety
-          jugada = null;
-        }
-
-        if (!jugada) {
-          document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          return;
-        }
-
-        // Determine current user: prefer explicit param, otherwise infer from jugada fields
-        var inferredUser = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
-        var currentUser = paramUsuario || inferredUser;
-
-        if (!currentUser) {
-          document.getElementById("nodata").textContent = "No se pudo determinar el usuario actual. Use ?usuario=<USUARIO> en la URL.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          return;
-        }
-
-        // Verify that the jugada belongs to the currentUser (if paramUsuario provided enforce it)
-        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
-        if (paramUsuario) {
-          if (!equalsUser(jugadaUserField, currentUser)) {
-            document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
-            document.getElementById("nodata").style.display = "block";
-            document.getElementById("loadingMsg").style.display = "none";
-            return;
-          }
-        } else {
-          // if no param provided, we already inferred currentUser from jugada so proceed
-        }
-
-        // Populate header fields from jugada
-        document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
-        document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
-        // Prefer explicit display name field if exists
-        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
-        document.getElementById("observaciones").textContent = jugada.OBSERVACIONES || jugada.observaciones || "";
-        document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
-        renderBarcode(jugadaID);
-
-        var jugadaKey = (jugada.FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
-
-        // Filter detalles requiring:
-        // - estado ACTIVO
-        // - matching fecha+JUEGA (same key)
-        // - USUARIO (or usuario) equals currentUser
-        var detallesFiltrados = detalles.filter(d => {
-          var dFecha = d.FECHA || d.fecha || "";
-          var dJuega = d.JUEGA || d.juega || "";
-          var estado = d.ESTADO || d.estado || "";
-          var dUsuario = d.USUARIO || d.usuario || "";
-          var keyMatches = (dFecha + dJuega) === jugadaKey;
-          var userMatches = equalsUser(dUsuario, currentUser);
-          return estado === "ACTIVO" && keyMatches && userMatches;
-        });
-
-        detallesFiltrados.sort(function(a, b){
-          var numA = a.NUMERO || a.numero || "";
-          var numB = b.NUMERO || b.numero || "";
-          var nA = parseInt(numA, 10);
-          var nB = parseInt(numB, 10);
-          if(!isNaN(nA) && !isNaN(nB)) return nA - nB;
-          return (''+numA).localeCompare((''+numB), 'es', {numeric:true, sensitivity:'base'});
-        });
-
-        var totalNumeros = detallesFiltrados.length;
-        var totalVenta = detallesFiltrados.reduce(function(sum, det) {
-          var val = (det.VALOR || det.valor || "0").toString().replace(",", ".");
-          var num = parseFloat(val);
-          return sum + (isNaN(num) ? 0 : num);
-        }, 0);
-        document.getElementById("totalNumeros").textContent = totalNumeros;
-        document.getElementById("totalVenta").textContent = formatLempirasSinDecimales(totalVenta);
-
-        var detallePages = paginarDetalles(detallesFiltrados, 48, 80);
-        var pagesContainer = document.getElementById("detallePagesContainer");
-        pagesContainer.innerHTML = "";
-
-        detallePages.forEach(function(pageDetalles, idx){
-          var pageDiv = document.createElement("div");
-          pageDiv.className = "detalle-page" + (idx === 0 ? " first" : "");
-          pageDiv.innerHTML = 
-            (idx === 0 ? '<div class="detalle-title">Detalle</div>' : '') +
-            '<div class="detalle-grid-wrapper">' +
-            '<div class="detalle-grid">' +
-            pageDetalles.map(function(det){
-              var numero = det.NUMERO || det.numero || "";
-              var valor = det.VALOR || det.valor || "";
-              var valorFormateado = formatLempirasSinDecimales(parseFloat(valor.toString().replace(",", ".")));
-              return `<div class="detalle-card">
-                <div class="numero"># ${numero}</div>
-                <div class="valor">${valorFormateado}</div>
-              </div>`;
-            }).join('') +
-            '</div></div>';
-          pagesContainer.appendChild(pageDiv);
-        });
-
-        if (detallesFiltrados.length === 0) {
-          document.getElementById("nodata").textContent = "No se encontraron detalles activos para esta jugada y usuario.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("jugadaCarta").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          document.getElementById("printBtn").style.display = "none";
-          return;
-        }
-
-        document.getElementById("jugadaCarta").style.display = "block";
-        document.getElementById("loadingMsg").style.display = "none";
-        document.getElementById("printBtn").style.display = "block";
-      })
-      .catch(function(e){
-        document.getElementById("nodata").style.display = "block";
-        document.getElementById("loadingMsg").style.display = "none";
-        document.getElementById("jugadaCarta").style.display = "block";
-        document.getElementById("printBtn").style.display = "none";
-      });
-    }
-
-    window.onload = cargarJugada;
-
-    function isMobileDevice() {
-      return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent);
-    }
-
-    document.getElementById("printBtn").onclick = function() {
-      if (isMobileDevice()) {
-        prepareLogoForPDF(function() {
-          var element = document.getElementById("jugadaCarta");
-          var opt = {
-            margin: [0.4, 0.3, 0.7, 0.3], // top, left, bottom, right
-            filename: 'jugada.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-          };
-          html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
-            if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })] })) {
-              navigator.share({
-                files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })],
-                title: 'Resumen de Jugada',
-                text: 'Aquí está el archivo PDF de la jugada.'
-              }).catch(function(){});
-            } else {
-              var url = URL.createObjectURL(pdfBlob);
-              var a = document.createElement('a');
-              a.href = url;
-              a.download = 'jugada.pdf';
-              document.body.appendChild(a);
-              a.click();
-              setTimeout(function() {
-                URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-              }, 500);
+        // Initialize
+        async function init() {
+            try {
+                await loadData();
+                populateJugadaSelect();
+            } catch (error) {
+                showError('Error al cargar los datos: ' + error.message);
             }
-          });
-        });
-      } else {
-        window.print();
-      }
-    };
+        }
 
-    function updateExportButton() {
-      var btn = document.getElementById("printBtn");
-      if (isMobileDevice()) {
-        btn.textContent = "Compartir PDF";
-      } else {
-        btn.textContent = "Imprimir";
-        btn.onclick = function() {
-          window.print();
-        };
-      }
-    }
-    updateExportButton();
-  </script>
+        // Load all data
+        async function loadData() {
+            try {
+                const [jugadas, detalles, ventas] = await Promise.all([
+                    fetch(JUGADA_URL).then(r => r.json()),
+                    fetch(DETALLE_URL).then(r => r.json()),
+                    fetch(VENTAS_URL).then(r => r.json())
+                ]);
+
+                jugadasData = jugadas;
+                detallesData = detalles;
+                ventasData = ventas;
+
+                // Create efficient Map lookup for VENTAS by ID
+                ventasMap = new Map(ventas.map(venta => [venta.ID, venta]));
+
+            } catch (error) {
+                throw new Error('No se pudieron cargar los datos');
+            }
+        }
+
+        // Populate jugada dropdown
+        function populateJugadaSelect() {
+            const select = document.getElementById('jugadaSelect');
+            select.innerHTML = '<option value="">Seleccione una jugada...</option>';
+
+            jugadasData
+                .filter(j => j.ESTADO === 'ACTIVO')
+                .forEach(jugada => {
+                    const option = document.createElement('option');
+                    option.value = jugada.ID;
+                    option.textContent = `${jugada.NOMBRE} - ${jugada.FECHA}`;
+                    select.appendChild(option);
+                });
+
+            select.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    generateReport(e.target.value);
+                } else {
+                    document.getElementById('reportContent').innerHTML = 
+                        '<div class="loading">Seleccione una jugada para ver el reporte...</div>';
+                }
+            });
+        }
+
+        // Generate report for selected jugada
+        function generateReport(jugadaId) {
+            const jugada = jugadasData.find(j => j.ID === jugadaId);
+            if (!jugada) {
+                showError('Jugada no encontrada');
+                return;
+            }
+
+            // Filter detalles: both DETALLE.ESTADO and related VENTAS.ESTADO must be "ACTIVO"
+            const detallesFiltrados = detallesData.filter(detalle => {
+                // Check if DETALLE is for this JUGADA and is ACTIVO
+                if (detalle.JUGADA !== jugadaId || detalle.ESTADO !== 'ACTIVO') {
+                    return false;
+                }
+
+                // Check if related VENTAS record exists and is also ACTIVO
+                const ventaRelacionada = ventasMap.get(detalle.VENTA);
+                if (!ventaRelacionada || ventaRelacionada.ESTADO !== 'ACTIVO') {
+                    return false;
+                }
+
+                // Both conditions met
+                return true;
+            });
+
+            // Calculate statistics
+            const totalRegistros = detallesFiltrados.length;
+            const totalMonto = detallesFiltrados.reduce((sum, d) => sum + parseFloat(d.MONTO || 0), 0);
+            const totalComision = detallesFiltrados.reduce((sum, d) => sum + parseFloat(d.COMISION || 0), 0);
+            const totalNeto = totalMonto - totalComision;
+
+            // Generate HTML
+            const html = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Registros</h3>
+                        <div class="value">${totalRegistros}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Monto Total</h3>
+                        <div class="value">$${totalMonto.toFixed(2)}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Comisión Total</h3>
+                        <div class="value">$${totalComision.toFixed(2)}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Neto Total</h3>
+                        <div class="value">$${totalNeto.toFixed(2)}</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Venta</th>
+                                <th>Número</th>
+                                <th>Monto</th>
+                                <th>Comisión</th>
+                                <th>Neto</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${detallesFiltrados.map(detalle => `
+                                <tr>
+                                    <td>${detalle.ID}</td>
+                                    <td>${detalle.VENTA}</td>
+                                    <td>${detalle.NUMERO}</td>
+                                    <td class="number">$${parseFloat(detalle.MONTO || 0).toFixed(2)}</td>
+                                    <td class="number">$${parseFloat(detalle.COMISION || 0).toFixed(2)}</td>
+                                    <td class="number">$${(parseFloat(detalle.MONTO || 0) - parseFloat(detalle.COMISION || 0)).toFixed(2)}</td>
+                                    <td>${detalle.ESTADO}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            document.getElementById('reportContent').innerHTML = html;
+        }
+
+        // Show error message
+        function showError(message) {
+            document.getElementById('reportContent').innerHTML = 
+                `<div class="error">${message}</div>`;
+        }
+
+        // Start the application
+        init();
+    </script>
 </body>
 </html>
-```
