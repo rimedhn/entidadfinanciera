@@ -1,4 +1,4 @@
-<! DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -8,7 +8,7 @@
   <style>
     @page {
       size: letter;
-      margin: 0.7in 0.5in 1. 1in 0.5in;
+      margin: 0.7in 0.5in 1.1in 0.5in;
     }
     body {
       font-family: Arial, sans-serif;
@@ -29,7 +29,7 @@
       text-align: center;
       font-size: 1.25em;
       color: #226;
-      margin: 24px 0;
+      margin:  24px 0;
       font-weight: bold;
       letter-spacing: 1px;
     }
@@ -68,7 +68,7 @@
     }
     .titulo-negocio {
       font-size: 1.48em;
-      font-weight:  bold;
+      font-weight: bold;
       color: #333;
       margin-bottom: 3px;
       margin-top: 7px;
@@ -87,7 +87,7 @@
       flex-direction: column;
       align-items: flex-end;
       width: 47%;
-      min-width: 200px;
+      min-width:  200px;
       margin-top:  7px;
     }
     .barcode-container {
@@ -99,7 +99,7 @@
       height: 70px !important;
       object-fit: contain;
       display: block;
-      margin: 0 0 2px auto;
+      margin:  0 0 2px auto;
     }
     .codigo-jugada {
       font-size:  0.95em;
@@ -112,7 +112,7 @@
       width: 100%;
       margin-bottom: 15px;
       border-collapse:  collapse;
-      font-size:  1.08em;
+      font-size: 1.08em;
       page-break-inside: avoid;
       break-inside: avoid;
     }
@@ -130,7 +130,7 @@
       vertical-align: top;
       padding-bottom: 3px;
     }
-    . info-value {
+    .info-value {
       font-size: 1em;
       color: #222;
       padding-bottom: 3px;
@@ -162,7 +162,7 @@
       display: grid;
       grid-template-columns:  repeat(8, 1fr);
       gap: 14px;
-      margin-bottom:  14px;
+      margin-bottom: 14px;
       width: 100%;
       page-break-inside: avoid;
       break-inside: avoid;
@@ -170,7 +170,7 @@
     .detalle-card {
       background: #fafafa;
       border: 1px solid #eaeaea;
-      border-radius: 6px;
+      border-radius:  6px;
       padding: 10px 10px 7px 10px;
       display: flex;
       flex-direction: column;
@@ -182,8 +182,8 @@
     }
     . numero {
       font-size: 1.2em;
-      font-weight: bold;
-      color:  #266;
+      font-weight:  bold;
+      color: #266;
       margin-bottom: 4px;
       word-break: break-word;
     }
@@ -196,8 +196,8 @@
     .observaciones {
       background: #f1f1f1;
       padding: 9px 12px;
-      border-radius: 4px;
-      font-size: 1em;
+      border-radius:  4px;
+      font-size:  1em;
       color: #444;
       margin-bottom: 8px;
       margin-top: 10px;
@@ -237,7 +237,7 @@
       #printBtn, #loadingMsg {
         display: none ! important;
       }
-      .jugada-carta {
+      . jugada-carta {
         background: #fff !important;
         page-break-after: always;
       }
@@ -262,7 +262,7 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min. js"></script>
 </head>
 <body>
@@ -339,7 +339,7 @@
       JsBarcode("#barcode", id || "", {
         format: "CODE128",
         width: 2,
-        height:  90,
+        height: 90,
         displayValue: false,
         margin: 0,
       });
@@ -409,12 +409,10 @@
       document.getElementById("printBtn").style.display = "none";
       document.getElementById("nodata").style.display = "none";
 
-      // Optional explicit user param
       var paramUsuario = getQueryParam("usuario") || getQueryParam("user") || getQueryParam("u");
 
       if (! jugadaID) {
-        // When no id provided, we need usuario param to show data (can't infer)
-        if (!paramUsuario) {
+        if (! paramUsuario) {
           document.getElementById("nodata").textContent = "Proporcione el parámetro ? id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte.";
           document.getElementById("nodata").style.display = "block";
           document.getElementById("loadingMsg").style.display = "none";
@@ -428,7 +426,6 @@
         fetch(opensheetUrlVentas).then(resp => resp.json())
       ])
       .then(([jugadas, detalles, ventas]) => {
-        // Create a Map for efficient VENTAS lookup by ID
         var ventasMap = new Map();
         ventas.forEach(function(venta) {
           var ventaId = venta.ID || venta.id || "";
@@ -437,23 +434,20 @@
           }
         });
 
-        // first find the jugada by id (without user filtering), to be able to infer user if needed
         var jugada = null;
         if (jugadaID) {
           jugada = jugadas.find(j => (j.ID == jugadaID || j.id == jugadaID));
         } else {
-          // No id:  cannot continue (we required usuario param above), but keep for safety
           jugada = null;
         }
 
-        if (! jugada) {
-          document. getElementById("nodata").textContent = "No se encontró la jugada especificada.";
+        if (!jugada) {
+          document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
           document.getElementById("nodata").style.display = "block";
           document.getElementById("loadingMsg").style.display = "none";
           return;
         }
 
-        // Determine current user:  prefer explicit param, otherwise infer from jugada fields
         var inferredUser = jugada. USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || inferredUser;
 
@@ -464,47 +458,36 @@
           return;
         }
 
-        // Verify that the jugada belongs to the currentUser (if paramUsuario provided enforce it)
-        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada. nombreusuario || "";
+        var jugadaUserField = jugada.USUARIO || jugada. usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
         if (paramUsuario) {
-          if (!equalsUser(jugadaUserField, currentUser)) {
+          if (! equalsUser(jugadaUserField, currentUser)) {
             document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
             document. getElementById("nodata").style.display = "block";
             document. getElementById("loadingMsg").style.display = "none";
             return;
           }
-        } else {
-          // if no param provided, we already inferred currentUser from jugada so proceed
         }
 
-        // Populate header fields from jugada
         document.getElementById("fecha").textContent = jugada. FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada. HORA || jugada.hora || "";
-        // Prefer explicit display name field if exists
-        document.getElementById("usuario").textContent = jugada. NOMBREUSUARIO || jugada. usuario || jugada.USUARIO || currentUser;
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
         document.getElementById("observaciones").textContent = jugada. OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada. ID || jugada.id || "";
         renderBarcode(jugadaID);
 
         var jugadaKey = (jugada. FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
 
-        // Filter detalles requiring: 
-        // - DETALLE. ESTADO === "ACTIVO"
-        // - matching fecha+JUEGA (same key)
-        // - USUARIO (or usuario) equals currentUser
-        // - Related VENTAS record also has ESTADO === "ACTIVO"
         var detallesFiltrados = detalles.filter(d => {
           var dFecha = d.FECHA || d.fecha || "";
           var dJuega = d.JUEGA || d.juega || "";
           var estadoDetalle = (d.ESTADO || d.estado || "").toString().trim().toUpperCase();
           var dUsuario = d.USUARIO || d.usuario || "";
-          var ventaId = (d.VENTA || d.venta || "").toString().trim();
+          var ventaId = (d. VENTA || d.venta || "").toString().trim();
           
           var keyMatches = (dFecha + dJuega) === jugadaKey;
           var userMatches = equalsUser(dUsuario, currentUser);
           var detalleActivo = estadoDetalle === "ACTIVO";
           
-          // Check if related VENTA is also ACTIVO
           var ventaActiva = false;
           if (ventaId && ventasMap.has(ventaId)) {
             var ventaRecord = ventasMap.get(ventaId);
@@ -515,17 +498,17 @@
           return detalleActivo && ventaActiva && keyMatches && userMatches;
         });
 
-        detallesFiltrados. sort(function(a, b){
+        detallesFiltrados.sort(function(a, b){
           var numA = a.NUMERO || a.numero || "";
           var numB = b.NUMERO || b.numero || "";
           var nA = parseInt(numA, 10);
           var nB = parseInt(numB, 10);
-          if(! isNaN(nA) && !isNaN(nB)) return nA - nB;
+          if(!isNaN(nA) && !isNaN(nB)) return nA - nB;
           return (''+numA).localeCompare((''+numB), 'es', {numeric: true, sensitivity:'base'});
         });
 
         var totalNumeros = detallesFiltrados.length;
-        var totalVenta = detallesFiltrados. reduce(function(sum, det) {
+        var totalVenta = detallesFiltrados.reduce(function(sum, det) {
           var val = (det.VALOR || det.valor || "0").toString().replace(",", ".");
           var num = parseFloat(val);
           return sum + (isNaN(num) ? 0 : num);
@@ -538,7 +521,7 @@
         pagesContainer.innerHTML = "";
 
         detallePages.forEach(function(pageDetalles, idx){
-          var pageDiv = document. createElement("div");
+          var pageDiv = document.createElement("div");
           pageDiv.className = "detalle-page" + (idx === 0 ?  " first" : "");
           pageDiv.innerHTML = 
             (idx === 0 ? '<div class="detalle-title">Detalle</div>' : '') +
@@ -566,9 +549,9 @@
           return;
         }
 
-        document.getElementById("jugadaCarta").style.display = "block";
+        document. getElementById("jugadaCarta").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
-        document. getElementById("printBtn").style.display = "block";
+        document.getElementById("printBtn").style.display = "block";
       })
       .catch(function(e){
         document.getElementById("nodata").style.display = "block";
@@ -589,15 +572,15 @@
         prepareLogoForPDF(function() {
           var element = document.getElementById("jugadaCarta");
           var opt = {
-            margin: [0. 4, 0.3, 0.7, 0.3], // top, left, bottom, right
+            margin: [0.4, 0.3, 0.7, 0.3],
             filename: 'jugada. pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF: { unit:  'in', format: 'letter', orientation: 'portrait' }
           };
           html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
             if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })] })) {
-              navigator. share({
+              navigator.share({
                 files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })],
                 title:  'Resumen de Jugada',
                 text: 'Aquí está el archivo PDF de la jugada.'
@@ -606,7 +589,7 @@
               var url = URL.createObjectURL(pdfBlob);
               var a = document.createElement('a');
               a.href = url;
-              a.download = 'jugada. pdf';
+              a.download = 'jugada.pdf';
               document.body.appendChild(a);
               a.click();
               setTimeout(function() {
