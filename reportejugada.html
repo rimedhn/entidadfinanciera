@@ -1,269 +1,269 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resumen de Jugada - Gestión de Números</title>
-  <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon">
-  <style>
-    @page {
-      size: letter;
-      margin: 0.7in 0.5in 1.1in 0.5in;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff;
-      margin: 0;
-      padding: 0;
-    }
-    .jugada-carta {
-      width: 8in;
-      margin: auto;
-      min-height: 10in;
-      background: #fff;
-      padding: 0;
-      position: relative;
-    }
-    #loadingMsg {
-      display: none;
-      text-align: center;
-      font-size: 1.25em;
-      color: #226;
-      margin: 24px 0;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .main-content {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-    }
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-    .header-left {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 53%;
-      min-width: 340px;
-      margin-top: 7px;
-    }
-    .logo-img {
-      width: 110px;
-      height: 110px;
-      object-fit: contain;
-      margin-right: 15px;
-      background: #fff;
-    }
-    .header-business {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .titulo-negocio {
-      font-size: 1.48em;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 3px;
-      margin-top: 7px;
-      word-break: break-word;
-    }
-    .resumen-label {
-      font-size: 1.08em;
-      color: #555;
-      margin-bottom: 0px;
-      margin-left: 1px;
-      font-weight: bold;
-      word-break: break-word;
-    }
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      width: 47%;
-      min-width: 200px;
-      margin-top: 7px;
-    }
-    .barcode-container {
-      text-align: right;
-      margin-bottom: 8px;
-    }
-    #barcode {
-      width: 160px !important;
-      height: 70px !important;
-      object-fit: contain;
-      display: block;
-      margin: 0 0 2px auto;
-    }
-    .codigo-jugada {
-      font-size: 0.95em;
-      color: #777;
-      margin-top: 0px;
-      text-align: right;
-      word-break: break-word;
-    }
-    .info-table {
-      width: 100%;
-      margin-bottom: 15px;
-      border-collapse: collapse;
-      font-size: 1.08em;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .info-table td {
-      padding: 7px 12px;
-      font-size: 1em;
-      border: none;
-      background: #fff;
-      vertical-align: top;
-    }
-    .info-label {
-      font-weight: bold;
-      color: #444;
-      width: 33%;
-      vertical-align: top;
-      padding-bottom: 3px;
-    }
-    .info-value {
-      font-size: 1em;
-      color: #222;
-      padding-bottom: 3px;
-    }
-    .detalle-section,
-    .detalle-page {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .detalle-title {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.15em;
-      margin: 2px 0 8px 0;
-      color: #444;
-      letter-spacing: 1px;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .detalle-grid-wrapper {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .detalle-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 14px;
-      margin-bottom: 14px;
-      width: 100%;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .detalle-card {
-      background: #fafafa;
-      border: 1px solid #eaeaea;
-      border-radius: 6px;
-      padding: 10px 10px 7px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      page-break-inside: avoid;
-      break-inside: avoid;
-      min-width: 0;
-      min-height: 60px;
-    }
-    .numero {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #266;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-    .valor {
-      font-size: 1.08em;
-      color: #444;
-      margin-bottom: 2px;
-      word-break: break-word;
-    }
-    .observaciones {
-      background: #f1f1f1;
-      padding: 9px 12px;
-      border-radius: 4px;
-      font-size: 1em;
-      color: #444;
-      margin-bottom: 8px;
-      margin-top: 10px;
-      width: 96%;
-      word-break: break-word;
-    }
-    .footer {
-      text-align: right;
-      font-size: 0.95em;
-      color: #888;
-      margin-top: 12px;
-    }
-    .no-data {
-      text-align: center;
-      color: #b00;
-      font-size: 1.05em;
-      margin-top: 10px;
-    }
-    #printBtn {
-      display: none;
-      margin: 18px auto 0 auto;
-      font-size: 1.1em;
-      padding: 8px 24px;
-      background: #226;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 6px #aaa2;
-    }
-    #printBtn:active {
-      background: #144;
-    }
-    @media print {
-      #printBtn, #loadingMsg {
-        display: none !important;
-      }
-      .jugada-carta {
-        background: #fff !important;
-        page-break-after: always;
-      }
-      .main-content, 
-      .info-table, 
-      .detalle-section, 
-      .detalle-page,
-      .detalle-title, 
-      .detalle-grid-wrapper, 
-      .detalle-grid, 
-      .detalle-card {
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-      .detalle-page {
-        page-break-before: always;
-        break-before: page;
-      }
-      .detalle-page.first {
-        page-break-before: auto !important;
-        break-before: auto !important;
-      }
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumen de Jugada - Gestión de Números</title>
+  <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon">
+  <style>
+    @page {
+      size: letter;
+      margin: 0.7in 0.5in 1. 1in 0.5in;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background:  #fff;
+      margin: 0;
+      padding:  0;
+    }
+    .jugada-carta {
+      width: 8in;
+      margin: auto;
+      min-height: 10in;
+      background: #fff;
+      padding:  0;
+      position: relative;
+    }
+    #loadingMsg {
+      display: none;
+      text-align: center;
+      font-size: 1.25em;
+      color: #226;
+      margin: 24px 0;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    . main-content {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      width: 100%;
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .header-left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 53%;
+      min-width: 340px;
+      margin-top: 7px;
+    }
+    . logo-img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      margin-right: 15px;
+      background: #fff;
+    }
+    .header-business {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .titulo-negocio {
+      font-size: 1.48em;
+      font-weight:  bold;
+      color: #333;
+      margin-bottom: 3px;
+      margin-top: 7px;
+      word-break: break-word;
+    }
+    .resumen-label {
+      font-size: 1.08em;
+      color: #555;
+      margin-bottom: 0px;
+      margin-left: 1px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 47%;
+      min-width:  200px;
+      margin-top:  7px;
+    }
+    .barcode-container {
+      text-align: right;
+      margin-bottom: 8px;
+    }
+    #barcode {
+      width: 160px ! important;
+      height: 70px !important;
+      object-fit: contain;
+      display: block;
+      margin:  0 0 2px auto;
+    }
+    .codigo-jugada {
+      font-size:  0.95em;
+      color: #777;
+      margin-top: 0px;
+      text-align: right;
+      word-break: break-word;
+    }
+    .info-table {
+      width: 100%;
+      margin-bottom: 15px;
+      border-collapse:  collapse;
+      font-size: 1.08em;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .info-table td {
+      padding: 7px 12px;
+      font-size: 1em;
+      border:  none;
+      background: #fff;
+      vertical-align: top;
+    }
+    .info-label {
+      font-weight: bold;
+      color: #444;
+      width: 33%;
+      vertical-align: top;
+      padding-bottom: 3px;
+    }
+    . info-value {
+      font-size: 1em;
+      color: #222;
+      padding-bottom: 3px;
+    }
+    .detalle-section,
+    .detalle-page {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      width: 100%;
+      margin-bottom: 0;
+    }
+    .detalle-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.15em;
+      margin:  2px 0 8px 0;
+      color: #444;
+      letter-spacing: 1px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .detalle-grid-wrapper {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      width: 100%;
+      margin-bottom: 0;
+    }
+    .detalle-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 14px;
+      margin-bottom:  14px;
+      width: 100%;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .detalle-card {
+      background: #fafafa;
+      border: 1px solid #eaeaea;
+      border-radius:  6px;
+      padding: 10px 10px 7px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      min-width: 0;
+      min-height: 60px;
+    }
+    . numero {
+      font-size: 1.2em;
+      font-weight:  bold;
+      color: #266;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+    .valor {
+      font-size: 1.08em;
+      color: #444;
+      margin-bottom: 2px;
+      word-break:  break-word;
+    }
+    .observaciones {
+      background: #f1f1f1;
+      padding: 9px 12px;
+      border-radius: 4px;
+      font-size:  1em;
+      color: #444;
+      margin-bottom: 8px;
+      margin-top: 10px;
+      width: 96%;
+      word-break: break-word;
+    }
+    .footer {
+      text-align: right;
+      font-size: 0.95em;
+      color: #888;
+      margin-top: 12px;
+    }
+    .no-data {
+      text-align: center;
+      color: #b00;
+      font-size: 1.05em;
+      margin-top: 10px;
+    }
+    #printBtn {
+      display: none;
+      margin:  18px auto 0 auto;
+      font-size: 1.1em;
+      padding: 8px 24px;
+      background: #226;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 6px #aaa2;
+    }
+    #printBtn:active {
+      background: #144;
+    }
+    @media print {
+      #printBtn, #loadingMsg {
+        display: none ! important;
+      }
+      . jugada-carta {
+        background: #fff !important;
+        page-break-after: always;
+      }
+      .main-content, 
+      .info-table, 
+      .detalle-section, 
+      .detalle-page,
+      .detalle-title, 
+      .detalle-grid-wrapper, 
+      .detalle-grid, 
+      .detalle-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .detalle-page {
+        page-break-before: always;
+        break-before: page;
+      }
+      .detalle-page. first {
+        page-break-before: auto ! important;
+        break-before: auto !important;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min. js"></script>
 </head>
 <body>
   <div id="loadingMsg">CARGANDO DATOS...</div>
