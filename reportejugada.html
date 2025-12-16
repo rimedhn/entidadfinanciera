@@ -1,364 +1,196 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Jugadas</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .filter-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-
-        .filter-group {
-            margin-bottom: 15px;
-        }
-
-        .filter-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .filter-group select,
-        .filter-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .stat-card h3 {
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            opacity: 0.9;
-        }
-
-        .stat-card .value {
-            font-size: 2em;
-            font-weight: bold;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.9em;
-            letter-spacing: 0.5px;
-        }
-
-        tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 1.2em;
-            color: #667eea;
-        }
-
-        .error {
-            background-color: #fee;
-            color: #c33;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .number {
-            text-align: right;
-            font-family: 'Courier New', monospace;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
-            th, td {
-                padding: 10px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Jugada</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .info-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f0f8ff;
+      border-left: 4px solid #007bff;
+      border-radius: 4px;
+    }
+    .info-section h2 {
+      margin-top: 0;
+      color: #007bff;
+      font-size: 1.2em;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      font-weight: bold;
+      color: #555;
+    }
+    .info-value {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .error {
+      color: red;
+      text-align: center;
+      font-weight: bold;
+      padding: 20px;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📊 Reporte de Jugadas</h1>
-            <p>Sistema de Análisis y Control</p>
-        </div>
-
-        <div class="content">
-            <div class="filter-section">
-                <div class="filter-group">
-                    <label for="jugadaSelect">Seleccionar Jugada:</label>
-                    <select id="jugadaSelect">
-                        <option value="">Cargando jugadas...</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="reportContent">
-                <div class="loading">Seleccione una jugada para ver el reporte...</div>
-            </div>
-        </div>
+  <div class="container">
+    <h1>Reporte de Jugada</h1>
+    <div id="content">
+      <div class="loading">Cargando datos...</div>
     </div>
+  </div>
 
-    <script>
-        // Data sources
-        const JUGADA_URL = 'https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/JUGADA';
-        const DETALLE_URL = 'https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/DETALLE';
-        const VENTAS_URL = 'https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/VENTAS';
+  <script>
+    (function() {
+      var contentDiv = document.getElementById("content");
+      
+      // Get URL parameters
+      var urlParams = new URLSearchParams(window.location.search);
+      var jugadaKey = urlParams.get("key");
+      var user = urlParams.get("user");
 
-        let jugadasData = [];
-        let detallesData = [];
-        let ventasData = [];
-        let ventasMap = new Map(); // Efficient lookup for VENTAS by ID
+      if (!jugadaKey || !user) {
+        contentDiv.innerHTML = '<div class="error">Error: Falta parámetro key o user en la URL.</div>';
+        return;
+      }
 
-        // Initialize
-        async function init() {
-            try {
-                await loadData();
-                populateJugadaSelect();
-            } catch (error) {
-                showError('Error al cargar los datos: ' + error.message);
-            }
+      var opensheetUrlJugadas = "https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/JUGADAS";
+      var opensheetUrlDetalles = "https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/DETALLESJUGADAS";
+      var opensheetUrlVentas = "https://opensheet.elk.sh/1ZcHPnYe03lLPNb07yTmxCf75ShifXVWbuFTF6kN_vH4/VENTAS";
+
+      Promise.all([
+        fetch(opensheetUrlJugadas).then(resp => resp.json()),
+        fetch(opensheetUrlDetalles).then(resp => resp.json()),
+        fetch(opensheetUrlVentas).then(resp => resp.json())
+      ])
+      .then(([jugadas, detalles, ventas]) => {
+        // Find the jugada matching the key
+        var jugada = jugadas.find(function(j) {
+          var jKey = (j.KEY || j.key || "").toString().trim();
+          return jKey === jugadaKey;
+        });
+
+        if (!jugada) {
+          contentDiv.innerHTML = '<div class="error">No se encontró la jugada con key: ' + jugadaKey + '</div>';
+          return;
         }
 
-        // Load all data
-        async function loadData() {
-            try {
-                const [jugadas, detalles, ventas] = await Promise.all([
-                    fetch(JUGADA_URL).then(r => r.json()),
-                    fetch(DETALLE_URL).then(r => r.json()),
-                    fetch(VENTAS_URL).then(r => r.json())
-                ]);
+        // Create ventas map
+        var ventasMap = new Map();
+        ventas.forEach(function(venta) {
+          var ventaId = venta.ID || venta.id || "";
+          if (ventaId) {
+            ventasMap.set(ventaId.toString().trim(), venta);
+          }
+        });
 
-                jugadasData = jugadas;
-                detallesData = detalles;
-                ventasData = ventas;
+        // Filter detalles for this jugada and user
+        var detallesFiltrados = detalles.filter(function(d) {
+          var keyMatches = (d.KEY || d.key || "").toString().trim() === jugadaKey;
+          var userMatches = (d.USER || d.user || "").toString().trim() === user;
+          
+          var ventaId = (d.VENTA || d.venta || "").toString().trim();
+          var estadoDetalle = (d.ESTADO || d.estado || "").toString().trim().toUpperCase();
+          var detalleActivo = estadoDetalle === "ACTIVO";
+          var ventaActiva = false;
+          if (ventaId && ventasMap.has(ventaId)) {
+            var ventaRecord = ventasMap.get(ventaId);
+            var estadoVenta = (ventaRecord.ESTADO || ventaRecord.estado || "").toString().trim().toUpperCase();
+            ventaActiva = estadoVenta === "ACTIVO";
+          }
+          
+          return detalleActivo && ventaActiva && keyMatches && userMatches;
+        });
 
-                // Create efficient Map lookup for VENTAS by ID
-                ventasMap = new Map(ventas.map(venta => [venta.ID, venta]));
+        // Build the info section
+        var infoHtml = '<div class="info-section">';
+        infoHtml += '<h2>Información de la Jugada</h2>';
+        infoHtml += '<div class="info-row"><span class="info-label">Key:</span><span class="info-value">' + (jugada.KEY || jugada.key || '') + '</span></div>';
+        infoHtml += '<div class="info-row"><span class="info-label">Sorteo:</span><span class="info-value">' + (jugada.SORTEO || jugada.sorteo || '') + '</span></div>';
+        infoHtml += '<div class="info-row"><span class="info-label">Fecha:</span><span class="info-value">' + (jugada.FECHA || jugada.fecha || '') + '</span></div>';
+        infoHtml += '<div class="info-row"><span class="info-label">Usuario:</span><span class="info-value">' + user + '</span></div>';
+        infoHtml += '</div>';
 
-            } catch (error) {
-                throw new Error('No se pudieron cargar los datos');
-            }
+        // Build the table
+        var tableHtml = '<table><thead><tr>';
+        tableHtml += '<th>Número</th>';
+        tableHtml += '<th>Monto</th>';
+        tableHtml += '<th>Venta</th>';
+        tableHtml += '</tr></thead><tbody>';
+
+        if (detallesFiltrados.length === 0) {
+          tableHtml += '<tr><td colspan="3" style="text-align:center;">No hay detalles activos para este usuario y jugada.</td></tr>';
+        } else {
+          detallesFiltrados.forEach(function(detalle) {
+            tableHtml += '<tr>';
+            tableHtml += '<td>' + (detalle.NUMERO || detalle.numero || '') + '</td>';
+            tableHtml += '<td>' + (detalle.MONTO || detalle.monto || '') + '</td>';
+            tableHtml += '<td>' + (detalle.VENTA || detalle.venta || '') + '</td>';
+            tableHtml += '</tr>';
+          });
         }
 
-        // Populate jugada dropdown
-        function populateJugadaSelect() {
-            const select = document.getElementById('jugadaSelect');
-            select.innerHTML = '<option value="">Seleccione una jugada...</option>';
+        tableHtml += '</tbody></table>';
 
-            jugadasData
-                .filter(j => j.ESTADO === 'ACTIVO')
-                .forEach(jugada => {
-                    const option = document.createElement('option');
-                    option.value = jugada.ID;
-                    option.textContent = `${jugada.NOMBRE} - ${jugada.FECHA}`;
-                    select.appendChild(option);
-                });
-
-            select.addEventListener('change', (e) => {
-                if (e.target.value) {
-                    generateReport(e.target.value);
-                } else {
-                    document.getElementById('reportContent').innerHTML = 
-                        '<div class="loading">Seleccione una jugada para ver el reporte...</div>';
-                }
-            });
-        }
-
-        // Generate report for selected jugada
-        function generateReport(jugadaId) {
-            const jugada = jugadasData.find(j => j.ID === jugadaId);
-            if (!jugada) {
-                showError('Jugada no encontrada');
-                return;
-            }
-
-            // Filter detalles: both DETALLE.ESTADO and related VENTAS.ESTADO must be "ACTIVO"
-            const detallesFiltrados = detallesData.filter(detalle => {
-                // Check if DETALLE is for this JUGADA and is ACTIVO
-                if (detalle.JUGADA !== jugadaId || detalle.ESTADO !== 'ACTIVO') {
-                    return false;
-                }
-
-                // Check if related VENTAS record exists and is also ACTIVO
-                const ventaRelacionada = ventasMap.get(detalle.VENTA);
-                if (!ventaRelacionada || ventaRelacionada.ESTADO !== 'ACTIVO') {
-                    return false;
-                }
-
-                // Both conditions met
-                return true;
-            });
-
-            // Calculate statistics
-            const totalRegistros = detallesFiltrados.length;
-            const totalMonto = detallesFiltrados.reduce((sum, d) => sum + parseFloat(d.MONTO || 0), 0);
-            const totalComision = detallesFiltrados.reduce((sum, d) => sum + parseFloat(d.COMISION || 0), 0);
-            const totalNeto = totalMonto - totalComision;
-
-            // Generate HTML
-            const html = `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Total Registros</h3>
-                        <div class="value">${totalRegistros}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Monto Total</h3>
-                        <div class="value">$${totalMonto.toFixed(2)}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Comisión Total</h3>
-                        <div class="value">$${totalComision.toFixed(2)}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Neto Total</h3>
-                        <div class="value">$${totalNeto.toFixed(2)}</div>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Venta</th>
-                                <th>Número</th>
-                                <th>Monto</th>
-                                <th>Comisión</th>
-                                <th>Neto</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${detallesFiltrados.map(detalle => `
-                                <tr>
-                                    <td>${detalle.ID}</td>
-                                    <td>${detalle.VENTA}</td>
-                                    <td>${detalle.NUMERO}</td>
-                                    <td class="number">$${parseFloat(detalle.MONTO || 0).toFixed(2)}</td>
-                                    <td class="number">$${parseFloat(detalle.COMISION || 0).toFixed(2)}</td>
-                                    <td class="number">$${(parseFloat(detalle.MONTO || 0) - parseFloat(detalle.COMISION || 0)).toFixed(2)}</td>
-                                    <td>${detalle.ESTADO}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-
-            document.getElementById('reportContent').innerHTML = html;
-        }
-
-        // Show error message
-        function showError(message) {
-            document.getElementById('reportContent').innerHTML = 
-                `<div class="error">${message}</div>`;
-        }
-
-        // Start the application
-        init();
-    </script>
+        contentDiv.innerHTML = infoHtml + tableHtml;
+      })
+      .catch(function(error) {
+        console.error("Error al cargar los datos:", error);
+        contentDiv.innerHTML = '<div class="error">Error al cargar los datos. Por favor, intente nuevamente.</div>';
+      });
+    })();
+  </script>
 </body>
 </html>
