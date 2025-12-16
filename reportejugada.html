@@ -332,7 +332,7 @@
     document.getElementById("idjugada").textContent = jugadaID || "";
 
     var now = new Date();
-    document.querySelector(". footer #fechaimpresion").textContent =
+    document.querySelector(".footer #fechaimpresion").textContent =
       "Impreso:  " + now.toLocaleDateString() + " " + now.toLocaleTimeString();
 
     function renderBarcode(id) {
@@ -450,7 +450,7 @@
         }
 
         // Determine current user:  prefer explicit param, otherwise infer from jugada fields
-        var inferredUser = jugada. USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
+        var inferredUser = jugada.USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || inferredUser;
 
         if (!currentUser) {
@@ -461,7 +461,7 @@
         }
 
         // Verify that the jugada belongs to the currentUser (if paramUsuario provided enforce it)
-        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada. nombreusuario || "";
+        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
         if (paramUsuario) {
           if (!equalsUser(jugadaUserField, currentUser)) {
             document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
@@ -474,12 +474,12 @@
         }
 
         // Populate header fields from jugada
-        document.getElementById("fecha").textContent = jugada. FECHA || jugada.fecha || "";
-        document.getElementById("hora").textContent = jugada. HORA || jugada.hora || "";
+        document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
+        document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
         // Prefer explicit display name field if exists
-        document.getElementById("usuario").textContent = jugada. NOMBREUSUARIO || jugada. usuario || jugada.USUARIO || currentUser;
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada. usuario || jugada.USUARIO || currentUser;
         document.getElementById("observaciones").textContent = jugada. OBSERVACIONES || jugada.observaciones || "";
-        document.getElementById("referencia").textContent = jugada. ID || jugada.id || "";
+        document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
         renderBarcode(jugadaID);
 
         var jugadaKey = (jugada. FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
@@ -509,7 +509,7 @@
           var userMatches = equalsUser(dUsuario, currentUser);
           
           // Verificar estado de la VENTA (columna VENTA en DETALLE)
-          var ventaId = (d. VENTA || d.venta || "").toString().trim();
+          var ventaId = (d.VENTA || d.venta || "").toString().trim();
           var estadoVenta = ventasMap.get(ventaId) || "ANULADO"; // Si no encuentra la Venta ID, asume ANULADO
           var ventaEsActivo = estadoVenta === "ACTIVO";
 
@@ -546,7 +546,7 @@
             '<div class="detalle-grid-wrapper">' +
             '<div class="detalle-grid">' +
             pageDetalles.map(function(det){
-              var numero = det.NUMERO || det. numero || "";
+              var numero = det.NUMERO || det.numero || "";
               var valor = det.VALOR || det.valor || "";
               var valorFormateado = formatLempirasSinDecimales(parseFloat(valor. toString().replace(",", ".")));
               return `<div class="detalle-card">
