@@ -1,4 +1,4 @@
-<! DOCTYPE html>
+<!  DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -21,7 +21,7 @@
       #thermal-pos . label {
         text-align:   center;
         font-size:  5mm;
-        line-height: 1.4;
+        line-height:  1.4;
       }
       
       #thermal-pos .informasi {
@@ -109,9 +109,8 @@
       }
 
       . mi-imagen {
-        width:   60mm;
-        height:  auto;
-        max-width:  100%;
+        width:   150px;
+        height:  150px;
         display: block;
         margin: 0 auto;
       }
@@ -160,7 +159,7 @@
         text-align: center;
         font-size: 4.2mm;
         word-wrap: break-word;
-        overflow-wrap:  break-word;
+        overflow-wrap:   break-word;
       }
     </style>
   </head>
@@ -182,11 +181,11 @@
         </tr>
         <tr>
           <td class="informasi" style="width: 30%;">CLIENTE:</td>
-          <td class="informasi" style="width:  70%;" id="cliente"></td>
+          <td class="informasi" style="width:   70%;" id="cliente"></td>
         </tr>
         <tr>
           <td class="informasi" style="width: 30%;">CAJERO:</td>
-          <td class="informasi" style="width:  70%;" id="cajero"></td>
+          <td class="informasi" style="width:   70%;" id="cajero"></td>
         </tr>
       </table>
 
@@ -275,7 +274,7 @@
       var productTable = document.getElementById("productTable");
       for (var i = 0; i < descriptions.length; i++) {
         // Create a new row for the description
-        var descriptionRow = productTable.insertRow();
+        var descriptionRow = productTable. insertRow();
         descriptionRow.innerHTML = `
         <td colspan="4" class="descriptions">${descriptions[i]}</td>
     `;
