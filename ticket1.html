@@ -168,7 +168,7 @@
     <div id="thermal-pos">
       <div class="label">
         <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Entidad Financiera" class="mi-imagen"/><br/>
-        <b>COMPROBANTE</b><br />               
+        <b><div style="text-align: center;">COMPROBANTE</div></b><br />               
       </div>
 
       <div align="center">--------------------------------------------------------</div>
@@ -284,9 +284,9 @@
         var detailsRow = productTable.insertRow();
         detailsRow. innerHTML = `
         <td class="qty">${quantitys[i]}</td>
-        <td class="Price">${prices[i]}</td>
-        <td class="Amount">${amounts[i]}</td>
-        <td class="Premio">${premios[i]}</td>
+        <td class="Price">L${prices[i]}</td>
+        <td class="Amount">L${amounts[i]}</td>
+        <td class="Premio">L${premios[i]}</td>
     `;
 
         // Add a class to the details row for styling
