@@ -1,4 +1,3 @@
-
 <! DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,7 +18,7 @@
         line-height: 13px;
       }
 
-      #thermal-pos .label {
+      #thermal-pos . label {
         text-align: center;
         font-size: 5mm;
         line-height: 1.4;
@@ -31,7 +30,7 @@
         word-wrap: break-word;
       }
 
-      #thermal-pos .listitem {
+      #thermal-pos . listitem {
         font-size: 4mm;
         height: 0mm;
         text-align: center;
@@ -41,11 +40,11 @@
         table-layout: fixed;
       }
 
-      #thermal-pos .item {
+      #thermal-pos . item {
         max-width: 80mm;
         font-size: 4.2mm;
-        word-wrap:  break-word;
-        width:  100%;
+        word-wrap:   break-word;
+        width:   100%;
       }
       #thermal-pos .amount {
         vertical-align: center;
@@ -83,7 +82,7 @@
         font-size: 4.2mm;
       }
       
-      #thermal-pos .bawah {
+      #thermal-pos . bawah {
         margin-top: 5mm;
         text-align: center;
         height: 90px;
@@ -97,7 +96,7 @@
 
       #thermal-pos .detail {
         margin-top: 5mm;
-        text-align: left;
+        text-align:  left;
         page-break-after: auto;
       }
 
@@ -105,7 +104,7 @@
         font-family: Arial, sans-serif;
       }
 
-      .mi-imagen {
+      . mi-imagen {
         width: 150px;
         height: 150px;
       }
@@ -124,29 +123,23 @@
         padding-bottom: 1px;
       }
 
-      /* Alineación específica para cada columna */
-      #thermal-pos . listitem .qty {
+      /* Alineación específica para cada columna de DATOS */
+      #thermal-pos . listitem. data-row .qty {
+        width: 5%;
+        text-align:  left;
+      }
+
+      #thermal-pos .listitem.data-row .Price {
         width: 5%;
         text-align: left;
       }
 
-      #thermal-pos .listitem . Price {
-        width: 5%;
-        text-align: left;
-      }
-
-      #thermal-pos .listitem .Desc,
-      #thermal-pos . listitem .Isv {
-        width: 0%;
-        text-align: center;
-      }
-
-      #thermal-pos .listitem .Amount {
+      #thermal-pos .listitem.data-row .Amount {
         width: 60%;
         text-align: left;
       }
       
-      #thermal-pos .listitem . Premio {
+      #thermal-pos . listitem.data-row .Premio {
         width: 30%;
         text-align: center;
       }
@@ -160,7 +153,7 @@
       </div>
 
       <div align="center">--------------------------------------------------------</div>
-      <div   align="center"><b>REFERENCIA: <span id="referencia"></span></b></div>
+      <div align="center"><b>REFERENCIA:  <span id="referencia"></span></b></div>
       <div align="center">--------------------------------------------------------</div>
 
       <table>
@@ -230,12 +223,12 @@
     <script>
       // Function to get URL parameters
       function getUrlParameter(name) {
-        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        name = name. replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-        var results = regex. exec(location.search);
+        var results = regex.exec(location.search);
         return results === null
           ? ""
-          : decodeURIComponent(results[1].replace(/\+/g, " "));
+          : decodeURIComponent(results[1]. replace(/\+/g, " "));
       }
 
       // Function to set text content of an element
@@ -262,12 +255,12 @@
       var productTable = document.getElementById("productTable");
       for (var i = 0; i < descriptions.length; i++) {
         // Create a new row for the description
-        var descriptionRow = productTable. insertRow();
+        var descriptionRow = productTable.insertRow();
         descriptionRow.innerHTML = `
         <td colspan="4" class="descriptions">${descriptions[i]}</td>
     `;
 
-        // Create a new row for the other details
+        // Create a new row for the other details with data-row class
         var detailsRow = productTable.insertRow();
         detailsRow.innerHTML = `
         <td class="qty">${quantitys[i]}</td>
@@ -276,12 +269,12 @@
         <td class="Premio">${premios[i]}</td>
     `;
 
-        // Add a class to the details row for styling
-        detailsRow.className = "listitem";
+        // Add classes to the details row for styling
+        detailsRow. className = "listitem data-row";
       }      
 
       // Trigger print when the page loads
-      window.onload = function () {
+      window. onload = function () {
         window.print();
       };
     </script>
