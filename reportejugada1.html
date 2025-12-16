@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resumen de Jugada</title>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
+<style>
+body{font-family:Arial;margin:0;background:#fff}
+#loadingMsg{text-align:center;font-size:18px;margin:25px;font-weight:bold}
+.no-data{text-align:center;color:#b00;font-size:16px;margin-top:20px}
+.detalle-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.detalle-card{border:1px solid #ddd;padding:8px;text-align:center;border-radius:5px}
+.numero{font-weight:bold;color:#225}
+.valor{color:#444}
+</style>
+</head>
+
+<body>
+
+<div id="loadingMsg">CARGANDO DATOS...</div>
+<div id="nodata" class="no-data" style="display:none"></div>
+
+<div id="jugadaCarta" style="display:none;padding:20px">
+
+  <h2>Resumen de Jugada</h2>
+
+  <p><b>ID:</b> <span id="idjugada"></span></p>
+  <p><b>Fecha:</b> <span id="fecha"></span></p>
+  <p><b>Hora:</b> <span id="hora"></span></p>
+  <p><b>Usuario:</b> <span id="usuario"></span></p>
+  <p><b>Total Números:</b> <span id="totalNumeros"></span></p>
+  <p><b>Total Venta:</b> <span id="totalVenta"></span></p>
+
+  <svg id="barcode"></svg>
+
+  <h3>Detalle</h3>
+  <div id="detallePagesContainer" class="detalle-grid"></div>
+
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+
+const URL_JUGADA  = "https://opensheet.elk.sh/1QJgFNnXObYHWfe7PzrESwi4_YO3IZtzk2NToyO12bS8/JUGADA";
+const URL_DETALLE = "https://opensheet.elk.sh/1so5d-hNEr05ElnGZy6VnUUJ8IsKC8pgdCwIMkORflkw/DETALLE";
+const URL_VENTAS  = "https://opensheet.elk.sh/1q8MUq8L0XtWX7uKRcepZys-No48xYKyGX1uUjTAwJgk/VENTAS";
+
+/* ================= HELPERS ================= */
+
+const getParam = p => new URLSearchParams(location.search).get(p);
+
+function normalizarClave(fecha, hora){
+  return (fecha + " " + hora)
+    .toString()
+    .trim()
+    .replace(/\s+/g," ")
+    .toUpperCase();
+}
+
+function equalsUser(a,b){
+  return (a||"").toString().trim().toUpperCase() ===
+         (b||"").toString().trim().toUpperCase();
+}
+
+function showError(msg){
+  document.getElementById("loadingMsg").style.display="none";
+  document.getElementById("jugadaCarta").style.display="none";
+  document.getElementById("nodata").style.display="block";
+  document.getElementById("nodata").textContent=msg;
+}
+
+/* ================= MAIN ================= */
+
+const JUGADA_ID = getParam("id");
+document.getElementById("idjugada").textContent = JUGADA_ID || "";
+
+if(!JUGADA_ID){
+  showError("Debe proporcionar ?id=");
+  throw "";
+}
+
+Promise.all([
+  fetch(URL_JUGADA).then(r=>r.json()),
+  fetch(URL_DETALLE).then(r=>r.json()),
+  fetch(URL_VENTAS).then(r=>r.json())
+]).then(([jugadas, detalles, ventas])=>{
+
+  /* ====== JUGADA ====== */
+
+  const jugada = jugadas.find(j =>
+    (j.ID || j.id || "").toString().trim() === JUGADA_ID
+  );
+
+  if(!jugada){
+    showError("No existe la jugada solicitada");
+    return;
+  }
+
+  const currentUser = jugada.USUARIO || jugada.usuario || "";
+  const claveJugada = normalizarClave(jugada.FECHA, jugada.HORA);
+
+  document.getElementById("fecha").textContent = jugada.FECHA || "";
+  document.getElementById("hora").textContent  = jugada.HORA || "";
+  document.getElementById("usuario").textContent = currentUser;
+
+  JsBarcode("#barcode", JUGADA_ID, {displayValue:false});
+
+  /* ====== MAPA VENTAS ====== */
+
+  const ventasMap = new Map();
+  ventas.forEach(v=>{
+    const id = (v.ID || "").toString().trim();
+    const estado = (v.ESTADO || "").toUpperCase().trim();
+    if(id) ventasMap.set(id, estado);
+  });
+
+  /* ====== FILTRO FINAL (CLAVE + USUARIO + ACTIVO + VENTAS) ====== */
+
+  const detallesFiltrados = detalles.filter(d=>{
+
+    const claveDetalle = normalizarClave(d.FECHA, d.JUEGA);
+    const claveOK = claveDetalle === claveJugada;
+
+    const estadoDetalle = (d.ESTADO || "").toUpperCase().trim();
+    const detalleActivo = estadoDetalle === "ACTIVO";
+
+    const usuarioOK = equalsUser(d.USUARIO, currentUser);
+
+    const ventaId = (d.VENTA || "").toString().trim();
+    const estadoVenta = ventasMap.get(ventaId);
+    const ventaActiva = !ventaId || estadoVenta === "ACTIVO";
+
+    return claveOK && detalleActivo && usuarioOK && ventaActiva;
+  });
+
+  if(detallesFiltrados.length === 0){
+    showError("No se encontraron registros activos para esta jugada");
+    return;
+  }
+
+  /* ====== RENDER ====== */
+
+  let totalVenta = 0;
+  detallesFiltrados.forEach(d=>{
+    const num = d.NUMERO || "";
+    const val = parseFloat((d.VALOR || "0").toString().replace(",", "."));
+    totalVenta += isNaN(val)?0:val;
+
+    document.getElementById("detallePagesContainer").innerHTML += `
+      <div class="detalle-card">
+        <div class="numero">#${num}</div>
+        <div class="valor">L ${Math.round(val)}</div>
+      </div>`;
+  });
+
+  document.getElementById("totalNumeros").textContent = detallesFiltrados.length;
+  document.getElementById("totalVenta").textContent =
+    "L " + Math.round(totalVenta).toLocaleString();
+
+  document.getElementById("loadingMsg").style.display="none";
+  document.getElementById("jugadaCarta").style.display="block";
+
+}).catch(err=>{
+  console.error(err);
+  showError("Error cargando los datos");
+});
+</script>
+
+</body>
+</html>
