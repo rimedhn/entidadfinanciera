@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<! DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
       font-family: Arial, sans-serif;
       background:  #fff;
       margin: 0;
-      padding: 0;
+      padding:  0;
     }
     .jugada-carta {
       width: 8in;
@@ -29,7 +29,7 @@
       text-align: center;
       font-size: 1.25em;
       color: #226;
-      margin:  24px 0;
+      margin: 24px 0;
       font-weight: bold;
       letter-spacing: 1px;
     }
@@ -87,8 +87,8 @@
       flex-direction: column;
       align-items: flex-end;
       width: 47%;
-      min-width:  200px;
-      margin-top: 7px;
+      min-width: 200px;
+      margin-top:  7px;
     }
     .barcode-container {
       text-align: right;
@@ -111,8 +111,8 @@
     .info-table {
       width: 100%;
       margin-bottom: 15px;
-      border-collapse: collapse;
-      font-size: 1.08em;
+      border-collapse:  collapse;
+      font-size:  1.08em;
       page-break-inside: avoid;
       break-inside: avoid;
     }
@@ -130,7 +130,7 @@
       vertical-align: top;
       padding-bottom: 3px;
     }
-    .info-value {
+    . info-value {
       font-size: 1em;
       color: #222;
       padding-bottom: 3px;
@@ -162,7 +162,7 @@
       display: grid;
       grid-template-columns:  repeat(8, 1fr);
       gap: 14px;
-      margin-bottom: 14px;
+      margin-bottom:  14px;
       width: 100%;
       page-break-inside: avoid;
       break-inside: avoid;
@@ -170,7 +170,7 @@
     .detalle-card {
       background: #fafafa;
       border: 1px solid #eaeaea;
-      border-radius:  6px;
+      border-radius: 6px;
       padding: 10px 10px 7px 10px;
       display: flex;
       flex-direction: column;
@@ -237,7 +237,7 @@
       #printBtn, #loadingMsg {
         display: none ! important;
       }
-      . jugada-carta {
+      .jugada-carta {
         background: #fff !important;
         page-break-after: always;
       }
@@ -262,8 +262,8 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min. js"></script>
 </head>
 <body>
   <div id="loadingMsg">CARGANDO DATOS...</div>
@@ -339,7 +339,7 @@
       JsBarcode("#barcode", id || "", {
         format: "CODE128",
         width: 2,
-        height: 90,
+        height:  90,
         displayValue: false,
         margin: 0,
       });
@@ -347,7 +347,7 @@
 
     function formatLempirasSinDecimales(num) {
       if (isNaN(num)) return "L 0";
-      return "L " + Math.round(num).toLocaleString('es-HN', {maximumFractionDigits:  0});
+      return "L " + Math.round(num).toLocaleString('es-HN', {maximumFractionDigits: 0});
     }
 
     function paginarDetalles(detalles, firstPage, nextPages) {
@@ -414,7 +414,7 @@
 
       if (! jugadaID) {
         // When no id provided, we need usuario param to show data (can't infer)
-        if (! paramUsuario) {
+        if (!paramUsuario) {
           document.getElementById("nodata").textContent = "Proporcione el parámetro ? id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte.";
           document.getElementById("nodata").style.display = "block";
           document.getElementById("loadingMsg").style.display = "none";
@@ -446,10 +446,10 @@
           jugada = null;
         }
 
-        if (!jugada) {
-          document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
-          document. getElementById("nodata").style.display = "block";
-          document. getElementById("loadingMsg").style.display = "none";
+        if (! jugada) {
+          document. getElementById("nodata").textContent = "No se encontró la jugada especificada.";
+          document.getElementById("nodata").style.display = "block";
+          document.getElementById("loadingMsg").style.display = "none";
           return;
         }
 
@@ -458,7 +458,7 @@
         var currentUser = paramUsuario || inferredUser;
 
         if (!currentUser) {
-          document.getElementById("nodata").textContent = "No se pudo determinar el usuario actual. Use ? usuario=<USUARIO> en la URL.";
+          document.getElementById("nodata").textContent = "No se pudo determinar el usuario actual.  Use ? usuario=<USUARIO> en la URL.";
           document.getElementById("nodata").style.display = "block";
           document.getElementById("loadingMsg").style.display = "none";
           return;
@@ -493,7 +493,7 @@
         // - matching fecha+JUEGA (same key)
         // - USUARIO (or usuario) equals currentUser
         // - Related VENTAS record also has ESTADO === "ACTIVO"
-        var detallesFiltrados = detalles. filter(d => {
+        var detallesFiltrados = detalles.filter(d => {
           var dFecha = d.FECHA || d.fecha || "";
           var dJuega = d.JUEGA || d.juega || "";
           var estadoDetalle = (d.ESTADO || d.estado || "").toString().trim().toUpperCase();
@@ -515,7 +515,7 @@
           return detalleActivo && ventaActiva && keyMatches && userMatches;
         });
 
-        detallesFiltrados.sort(function(a, b){
+        detallesFiltrados. sort(function(a, b){
           var numA = a.NUMERO || a.numero || "";
           var numB = b.NUMERO || b.numero || "";
           var nA = parseInt(numA, 10);
@@ -538,7 +538,7 @@
         pagesContainer.innerHTML = "";
 
         detallePages.forEach(function(pageDetalles, idx){
-          var pageDiv = document.createElement("div");
+          var pageDiv = document. createElement("div");
           pageDiv.className = "detalle-page" + (idx === 0 ?  " first" : "");
           pageDiv.innerHTML = 
             (idx === 0 ? '<div class="detalle-title">Detalle</div>' : '') +
@@ -566,15 +566,15 @@
           return;
         }
 
-        document. getElementById("jugadaCarta").style.display = "block";
+        document.getElementById("jugadaCarta").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
-        document.getElementById("printBtn").style.display = "block";
+        document. getElementById("printBtn").style.display = "block";
       })
       .catch(function(e){
         document.getElementById("nodata").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
         document.getElementById("jugadaCarta").style.display = "block";
-        document.getElementById("printBtn").style.display = "none";
+        document. getElementById("printBtn").style.display = "none";
       });
     }
 
@@ -589,24 +589,24 @@
         prepareLogoForPDF(function() {
           var element = document.getElementById("jugadaCarta");
           var opt = {
-            margin: [0.4, 0.3, 0.7, 0.3], // top, left, bottom, right
+            margin: [0. 4, 0.3, 0.7, 0.3], // top, left, bottom, right
             filename: 'jugada. pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
+            html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
           };
           html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
             if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })] })) {
-              navigator.share({
+              navigator. share({
                 files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })],
-                title: 'Resumen de Jugada',
+                title:  'Resumen de Jugada',
                 text: 'Aquí está el archivo PDF de la jugada.'
               }).catch(function(){});
             } else {
               var url = URL.createObjectURL(pdfBlob);
               var a = document.createElement('a');
               a.href = url;
-              a.download = 'jugada.pdf';
+              a.download = 'jugada. pdf';
               document.body.appendChild(a);
               a.click();
               setTimeout(function() {
