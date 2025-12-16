@@ -10,7 +10,7 @@
         box-shadow: 0 0 0mm #eee;
         margin: 0mm;
         max-width: 80mm;
-        line-height: 4mm;
+        line-height:  4mm;
       }
 
       #thermal-pos h2 {
@@ -19,10 +19,11 @@
       }
 
       #thermal-pos . label {
-        text-align: center;
-        font-size: 5mm;
+        text-align:  center;
+        font-size:  5mm;
         line-height: 1.4;
       }
+      
       #thermal-pos .informasi {
         vertical-align: text-top;
         text-align: left;
@@ -35,17 +36,19 @@
         height: 0mm;
         text-align: center;
       }
+      
       #thermal-pos table {
         width: 100%;
         table-layout: fixed;
       }
 
       #thermal-pos . item {
-        max-width: 80mm;
+        max-width:  80mm;
         font-size: 4.2mm;
-        word-wrap:   break-word;
-        width:   100%;
+        word-wrap:  break-word;
+        width:  100%;
       }
+      
       #thermal-pos .amount {
         vertical-align: center;
         text-align: left;
@@ -88,14 +91,15 @@
         height: 90px;
         page-break-after: auto;
       }
+      
       #thermal-pos .detail1 {
-        margin-top: 5mm;
+        margin-top:  5mm;
         text-align: right;
         page-break-after: auto;
       }
 
-      #thermal-pos .detail {
-        margin-top: 5mm;
+      #thermal-pos . detail {
+        margin-top:  5mm;
         text-align:  left;
         page-break-after: auto;
       }
@@ -105,50 +109,65 @@
       }
 
       . mi-imagen {
-        width: 150px;
-        height: 150px;
+        width:  60mm;
+        height: auto;
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
       }
 
-      #thermal-pos .listitem td {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      #thermal-pos . descriptions {
-        width: 100%;
+      #thermal-pos .descriptions {
+        font-size: 4.2mm;
         text-align: left;
         font-weight: bold;
         padding-top: 1px;
         padding-bottom: 1px;
       }
 
-      /* Alineación específica para cada columna de DATOS */
-      #thermal-pos . listitem. data-row .qty {
-        width: 5%;
-        text-align:  left;
+      /* Tabla de productos con anchos fijos */
+      #productTable {
+        width: 100%;
+        table-layout: fixed;
       }
 
-      #thermal-pos .listitem.data-row .Price {
+      /* Anchos específicos para columnas de datos */
+      #productTable td. qty {
         width: 5%;
         text-align: left;
+        font-size: 4.2mm;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
-      #thermal-pos .listitem.data-row .Amount {
+      #productTable td.Price {
+        width: 5%;
+        text-align: left;
+        font-size: 4.2mm;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      #productTable td.Amount {
         width: 60%;
         text-align: left;
+        font-size: 4.2mm;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
       
-      #thermal-pos . listitem.data-row .Premio {
+      #productTable td.Premio {
         width: 30%;
         text-align: center;
+        font-size: 4.2mm;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
     </style>
   </head>
   <body id="all">
     <div id="thermal-pos">
       <div class="label">
-        <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
+        <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png? raw=true" alt="Mi imagen" class="mi-imagen" /><br />
         <b>COMPROBANTE</b><br />               
       </div>
 
@@ -158,7 +177,7 @@
 
       <table>
         <tr>
-          <td class="informasi" style="width: 30%;">FECHA:</td>
+          <td class="informasi" style="width:  30%;">FECHA:</td>
           <td class="informasi" style="width: 70%;" id="fecha"></td>
         </tr>
         <tr>
@@ -233,7 +252,7 @@
 
       // Function to set text content of an element
       function setTextContent(id, value) {
-        document.getElementById(id).textContent = value;
+        document. getElementById(id).textContent = value;
       }
 
       // Populate the receipt with data from URL parameters
@@ -245,6 +264,7 @@
       setTextContent("folio", getUrlParameter("folio"));
       setTextContent("recibido", getUrlParameter("recibido"));
       setTextContent("cambio", getUrlParameter("cambio"));
+      
       // Populate product table
       var descriptions = getUrlParameter("descriptions").split(",");
       var quantitys = getUrlParameter("quantitys").split(",");
@@ -260,7 +280,7 @@
         <td colspan="4" class="descriptions">${descriptions[i]}</td>
     `;
 
-        // Create a new row for the other details with data-row class
+        // Create a new row for the other details
         var detailsRow = productTable.insertRow();
         detailsRow.innerHTML = `
         <td class="qty">${quantitys[i]}</td>
@@ -269,8 +289,8 @@
         <td class="Premio">${premios[i]}</td>
     `;
 
-        // Add classes to the details row for styling
-        detailsRow. className = "listitem data-row";
+        // Add a class to the details row for styling
+        detailsRow.className = "listitem";
       }      
 
       // Trigger print when the page loads
