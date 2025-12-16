@@ -14,14 +14,14 @@
       font-family: Arial, sans-serif;
       background:  #fff;
       margin: 0;
-      padding: 0;
+      padding:  0;
     }
     .jugada-carta {
       width: 8in;
       margin: auto;
       min-height: 10in;
       background: #fff;
-      padding: 0;
+      padding:  0;
       position: relative;
     }
     #loadingMsg {
@@ -29,7 +29,7 @@
       text-align: center;
       font-size: 1.25em;
       color: #226;
-      margin:  24px 0;
+      margin: 24px 0;
       font-weight: bold;
       letter-spacing: 1px;
     }
@@ -130,7 +130,7 @@
       vertical-align: top;
       padding-bottom: 3px;
     }
-    .info-value {
+    . info-value {
       font-size: 1em;
       color: #222;
       padding-bottom: 3px;
@@ -160,9 +160,9 @@
     }
     .detalle-grid {
       display: grid;
-      grid-template-columns:  repeat(8, 1fr);
+      grid-template-columns: repeat(8, 1fr);
       gap: 14px;
-      margin-bottom: 14px;
+      margin-bottom:  14px;
       width: 100%;
       page-break-inside: avoid;
       break-inside: avoid;
@@ -182,7 +182,7 @@
     }
     . numero {
       font-size: 1.2em;
-      font-weight: bold;
+      font-weight:  bold;
       color: #266;
       margin-bottom: 4px;
       word-break: break-word;
@@ -196,8 +196,8 @@
     .observaciones {
       background: #f1f1f1;
       padding: 9px 12px;
-      border-radius:  4px;
-      font-size: 1em;
+      border-radius: 4px;
+      font-size:  1em;
       color: #444;
       margin-bottom: 8px;
       margin-top: 10px;
@@ -214,7 +214,7 @@
       text-align: center;
       color: #b00;
       font-size: 1.05em;
-      margin-top:  10px;
+      margin-top: 10px;
     }
     #printBtn {
       display: none;
@@ -263,7 +263,7 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min. js"></script>
 </head>
 <body>
   <div id="loadingMsg">CARGANDO DATOS...</div>
@@ -315,7 +315,7 @@
     <div class="footer">
       <span id="fechaimpresion"></span>
     </div>
-    <div id="nodata" class="no-data" style="display:none;">
+    <div id="nodata" class="no-data" style="display: none;">
       No se encontró información activa para esta jugada o no pertenece al usuario actual.
     </div>
   </div>
@@ -356,9 +356,9 @@
       if (detalles.length <= firstPage) {
         result.push(detalles);
       } else {
-        result. push(detalles.slice(0, firstPage));
+        result.push(detalles.slice(0, firstPage));
         start = firstPage;
-        while (start < detalles.length) {
+        while (start < detalles. length) {
           result.push(detalles.slice(start, start + nextPages));
           start += nextPages;
         }
@@ -413,7 +413,7 @@
 
       if (! jugadaID) {
         if (! paramUsuario) {
-          document.getElementById("nodata").textContent = "Proporcione el parámetro ? id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte.";
+          document.getElementById("nodata").textContent = "Proporcione el parámetro ? id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte. ";
           document.getElementById("nodata").style.display = "block";
           document.getElementById("loadingMsg").style.display = "none";
           return;
@@ -426,7 +426,6 @@
         fetch(opensheetUrlVentas).then(resp => resp.json())
       ])
       .then(([jugadas, detalles, ventas]) => {
-        // Create ventasMap for efficient lookup
         var ventasMap = new Map();
         ventas.forEach(function(venta) {
           var ventaId = venta.ID || venta.id || "";
@@ -449,7 +448,7 @@
           return;
         }
 
-        var inferredUser = jugada. USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
+        var inferredUser = jugada. USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || inferredUser;
 
         if (!currentUser) {
@@ -459,7 +458,7 @@
           return;
         }
 
-        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
+        var jugadaUserField = jugada.USUARIO || jugada. usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
         if (paramUsuario) {
           if (! equalsUser(jugadaUserField, currentUser)) {
             document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
@@ -471,15 +470,14 @@
 
         document.getElementById("fecha").textContent = jugada. FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada. HORA || jugada.hora || "";
-        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada. USUARIO || currentUser;
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
         document.getElementById("observaciones").textContent = jugada. OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada. ID || jugada.id || "";
         renderBarcode(jugadaID);
 
         var jugadaKey = (jugada. FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
 
-        // Filter detalles with VENTAS validation
-        var detallesFiltrados = detalles. filter(d => {
+        var detallesFiltrados = detalles.filter(d => {
           var dFecha = d.FECHA || d.fecha || "";
           var dJuega = d.JUEGA || d.juega || "";
           var estadoDetalle = (d.ESTADO || d.estado || "").toString().trim().toUpperCase();
@@ -490,18 +488,17 @@
           var userMatches = equalsUser(dUsuario, currentUser);
           var detalleActivo = estadoDetalle === "ACTIVO";
           
-          // Check if related VENTA is also ACTIVO
           var ventaActiva = false;
           if (ventaId && ventasMap.has(ventaId)) {
             var ventaRecord = ventasMap.get(ventaId);
-            var estadoVenta = (ventaRecord.ESTADO || ventaRecord. estado || "").toString().trim().toUpperCase();
+            var estadoVenta = (ventaRecord.ESTADO || ventaRecord.estado || "").toString().trim().toUpperCase();
             ventaActiva = estadoVenta === "ACTIVO";
           }
           
           return detalleActivo && ventaActiva && keyMatches && userMatches;
         });
 
-        detallesFiltrados. sort(function(a, b){
+        detallesFiltrados.sort(function(a, b){
           var numA = a.NUMERO || a.numero || "";
           var numB = b.NUMERO || b.numero || "";
           var nA = parseInt(numA, 10);
@@ -560,7 +557,7 @@
         document.getElementById("nodata").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
         document.getElementById("jugadaCarta").style.display = "block";
-        document. getElementById("printBtn").style.display = "none";
+        document.getElementById("printBtn").style.display = "none";
       });
     }
 
@@ -576,7 +573,7 @@
           var element = document.getElementById("jugadaCarta");
           var opt = {
             margin: [0.4, 0.3, 0.7, 0.3],
-            filename: 'jugada. pdf',
+            filename: 'jugada.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -592,7 +589,7 @@
               var url = URL.createObjectURL(pdfBlob);
               var a = document.createElement('a');
               a.href = url;
-              a.download = 'jugada. pdf';
+              a.download = 'jugada.pdf';
               document.body.appendChild(a);
               a.click();
               setTimeout(function() {
