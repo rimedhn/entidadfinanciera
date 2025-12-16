@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resumen de Jugada - Gestión de Números</title>
-  <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon"/>
+  <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon">
   <style>
     @page {
       size: letter;
@@ -272,7 +272,7 @@
     <div class="main-content">
       <div class="header-row">
         <div class="header-left">
-          <img class="logo-img" id="logoImg" src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Gestión de Números"/>
+          <img class="logo-img" id="logoImg" src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Gestión de Números" />
           <div class="header-business">
             <div class="titulo-negocio">ENTIDAD FINANCIERA</div>
             <div class="resumen-label">Resumen de Jugada</div>
@@ -322,7 +322,7 @@
   <script>
     var opensheetUrlJugada = "https://opensheet.elk.sh/1QJgFNnXObYHWfe7PzrESwi4_YO3IZtzk2NToyO12bS8/JUGADA";
     var opensheetUrlDetalle = "https://opensheet.elk.sh/1so5d-hNEr05ElnGZy6VnUUJ8IsKC8pgdCwIMkORflkw/DETALLE";
-    var opensheetUrlVentas = "https://opensheet.elk.sh/1q8MUq8L0XtWX7uKRcepZys-No48xYKyGX1uUjTAwJgk/VENTAS"; // Nuevo: URL para la tabla VENTAS
+    var opensheetUrlVentas = "https://opensheet.elk.sh/1q8MUq8L0XtWX7uKRcepZys-No48xYKyGX1uUjTAwJgk/VENTAS";
 
     function getQueryParam(param) {
       var urlParams = new URLSearchParams(window.location.search);
@@ -398,6 +398,7 @@
       });
     }
 
+    // Función para comparar usuarios ignorando mayúsculas/minúsculas y espacios
     function equalsUser(a, b) {
       if (!a && !b) return true;
       return ('' + (a || '')).toString().trim().toLowerCase() === ('' + (b || '')).toString().trim().toLowerCase();
@@ -413,7 +414,6 @@
       var paramUsuario = getQueryParam("usuario") || getQueryParam("user") || getQueryParam("u");
 
       if (!jugadaID) {
-        // When no id provided, we need usuario param to show data (can't infer)
         if (!paramUsuario) {
           document.getElementById("nodata").textContent = "Proporcione el parámetro ?id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte.";
           document.getElementById("nodata").style.display = "block";
@@ -425,16 +425,13 @@
       Promise.all([
         fetch(opensheetUrlJugada).then(resp => resp.json()),
         fetch(opensheetUrlDetalle).then(resp => resp.json()),
-        fetch(opensheetUrlVentas).then(resp => resp.json()) // Nuevo: Cargar la tabla VENTAS
+        fetch(opensheetUrlVentas).then(resp => resp.json())
       ])
-      .then(([jugadas, detalles, ventas]) => { // Nuevo: Recibir 'ventas'
-        // first find the jugada by id (without user filtering), to be able to infer user if needed
+      .then(([jugadas, detalles, ventas]) => {
+        // 1. Encontrar la jugada principal
         var jugada = null;
         if (jugadaID) {
           jugada = jugadas.find(j => (j.ID == jugadaID || j.id == jugadaID));
-        } else {
-          // No id: cannot continue (we required usuario param above), but keep for safety
-          jugada = null;
         }
 
         if (!jugada) {
@@ -444,7 +441,7 @@
           return;
         }
 
-        // Determine current user: prefer explicit param, otherwise infer from jugada fields
+        // 2. Determinar el usuario actual (usando el parámetro o infiriendo de la jugada)
         var inferredUser = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || inferredUser;
 
@@ -455,23 +452,18 @@
           return;
         }
 
-        // Verify that the jugada belongs to the currentUser (if paramUsuario provided enforce it)
+        // 3. Verificar que la jugada pertenezca al usuario (si se proporcionó un parámetro)
         var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
-        if (paramUsuario) {
-          if (!equalsUser(jugadaUserField, currentUser)) {
-            document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
-            document.getElementById("nodata").style.display = "block";
-            document.getElementById("loadingMsg").style.display = "none";
-            return;
-          }
-        } else {
-          // if no param provided, we already inferred currentUser from jugada so proceed
+        if (paramUsuario && !equalsUser(jugadaUserField, currentUser)) {
+          document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
+          document.getElementById("nodata").style.display = "block";
+          document.getElementById("loadingMsg").style.display = "none";
+          return;
         }
 
-        // Populate header fields from jugada
+        // 4. Poblar campos de encabezado
         document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
-        // Prefer explicit display name field if exists
         document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
         document.getElementById("observaciones").textContent = jugada.OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
@@ -479,40 +471,37 @@
 
         var jugadaKey = (jugada.FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
         
-        // Nuevo: Crear un mapa de Ventas para consulta rápida
+        // 5. Crear mapa de Ventas para consulta rápida (ID -> ESTADO)
         var ventasMap = new Map();
         ventas.forEach(v => {
           var ventaId = (v.ID || v.id || "").toString().trim();
           if (ventaId) {
-            // Almacenar el estado en mayúsculas para la comparación
             var estado = (v.ESTADO || v.estado || "").toUpperCase().trim();
             ventasMap.set(ventaId, estado);
           }
         });
 
 
-        // Filter detalles requiring:
-        // - matching fecha+JUEGA (same key)
-        // - USUARIO (or usuario) equals currentUser
-        // - DETALLE.ESTADO es ACTIVO
-        // - VENTAS.ESTADO de la fila relacionada es ACTIVO (Nuevo)
+        // 6. Filtrar los detalles
         var detallesFiltrados = detalles.filter(d => {
           var dFecha = d.FECHA || d.fecha || "";
           var dJuega = d.JUEGA || d.juega || "";
           var estadoDetalle = (d.ESTADO || d.estado || "").toUpperCase().trim();
           var dUsuario = d.USUARIO || d.usuario || "";
           
+          // Condición de Jugada (Fecha + Juega)
           var keyMatches = (dFecha + dJuega) === jugadaKey;
+          
+          // Condición de Usuario (Corregido: Usar equalsUser para el detalle)
           var userMatches = equalsUser(dUsuario, currentUser);
           
-          // Condición 1: El detalle debe estar ACTIVO
-          var detalleEsActivo = estadoDetalle === "ACTIVO";
+          // Condición de Estado del Detalle
+          var detalleEsActivo = estadoDetalle === "ACTIVO";
           
-          // Condición 2: La venta relacionada debe estar ACTIVA
-          var ventaId = (d.VENTA || d.venta || "").toString().trim();
-          // Obtener el estado de la venta. Si no se encuentra (undefined), se considera ANULADO por defecto.
-          var estadoVenta = ventasMap.get(ventaId) || "ANULADO";
-          var ventaEsActivo = estadoVenta === "ACTIVO";
+          // Condición de Estado de la Venta Relacionada
+          var ventaId = (d.VENTA || d.venta || "").toString().trim();
+          var estadoVenta = ventasMap.get(ventaId) || "ANULADO";
+          var ventaEsActivo = estadoVenta === "ACTIVO";
           
           return keyMatches && userMatches && detalleEsActivo && ventaEsActivo;
         });
@@ -573,10 +562,12 @@
         document.getElementById("printBtn").style.display = "block";
       })
       .catch(function(e){
+        document.getElementById("nodata").textContent = "Ocurrió un error al cargar los datos. Por favor, revise la consola para más detalles.";
         document.getElementById("nodata").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
         document.getElementById("jugadaCarta").style.display = "block";
         document.getElementById("printBtn").style.display = "none";
+        console.error("Error al cargar la jugada:", e);
       });
     }
 
