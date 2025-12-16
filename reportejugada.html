@@ -386,7 +386,7 @@
     function prepareLogoForPDF(callback) {
       var img = document.getElementById('logoImg');
       var url = img.getAttribute('src');
-      if (url. startsWith('data:')) {
+      if (url.startsWith('data:')) {
         callback();
         return;
       }
