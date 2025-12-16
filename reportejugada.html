@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resumen de Jugada - Gestión de Números</title>
   <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon">
   <style>
     @page {
       size: letter;
-      margin: 0.7in 0.5in 1.1in 0.5in;
+      margin: 0.7in 0.5in 1. 1in 0.5in;
     }
     body {
       font-family: Arial, sans-serif;
       background:  #fff;
       margin: 0;
-      padding:  0;
+      padding: 0;
     }
     .jugada-carta {
       width: 8in;
@@ -68,7 +68,7 @@
     }
     .titulo-negocio {
       font-size: 1.48em;
-      font-weight: bold;
+      font-weight:  bold;
       color: #333;
       margin-bottom: 3px;
       margin-top: 7px;
@@ -182,7 +182,7 @@
     }
     . numero {
       font-size: 1.2em;
-      font-weight:  bold;
+      font-weight: bold;
       color: #266;
       margin-bottom: 4px;
       word-break: break-word;
@@ -197,7 +197,7 @@
       background: #f1f1f1;
       padding: 9px 12px;
       border-radius:  4px;
-      font-size:  1em;
+      font-size: 1em;
       color: #444;
       margin-bottom: 8px;
       margin-top: 10px;
@@ -262,7 +262,7 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 </head>
 <body>
@@ -272,7 +272,7 @@
     <div class="main-content">
       <div class="header-row">
         <div class="header-left">
-          <img class="logo-img" id="logoImg" src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Gestión de Números"/>
+          <img class="logo-img" id="logoImg" src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Gestión de Números" />
           <div class="header-business">
             <div class="titulo-negocio">ENTIDAD FINANCIERA</div>
             <div class="resumen-label">Resumen de Jugada</div>
@@ -315,7 +315,7 @@
     <div class="footer">
       <span id="fechaimpresion"></span>
     </div>
-    <div id="nodata" class="no-data" style="display: none;">
+    <div id="nodata" class="no-data" style="display:none;">
       No se encontró información activa para esta jugada o no pertenece al usuario actual.
     </div>
   </div>
@@ -356,7 +356,7 @@
       if (detalles.length <= firstPage) {
         result.push(detalles);
       } else {
-        result.push(detalles.slice(0, firstPage));
+        result. push(detalles.slice(0, firstPage));
         start = firstPage;
         while (start < detalles.length) {
           result.push(detalles.slice(start, start + nextPages));
@@ -426,6 +426,7 @@
         fetch(opensheetUrlVentas).then(resp => resp.json())
       ])
       .then(([jugadas, detalles, ventas]) => {
+        // Create ventasMap for efficient lookup
         var ventasMap = new Map();
         ventas.forEach(function(venta) {
           var ventaId = venta.ID || venta.id || "";
@@ -443,12 +444,12 @@
 
         if (!jugada) {
           document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
+          document. getElementById("nodata").style.display = "block";
+          document. getElementById("loadingMsg").style.display = "none";
           return;
         }
 
-        var inferredUser = jugada. USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
+        var inferredUser = jugada. USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || inferredUser;
 
         if (!currentUser) {
@@ -458,7 +459,7 @@
           return;
         }
 
-        var jugadaUserField = jugada.USUARIO || jugada. usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
+        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
         if (paramUsuario) {
           if (! equalsUser(jugadaUserField, currentUser)) {
             document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
@@ -470,14 +471,15 @@
 
         document.getElementById("fecha").textContent = jugada. FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada. HORA || jugada.hora || "";
-        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada. USUARIO || currentUser;
         document.getElementById("observaciones").textContent = jugada. OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada. ID || jugada.id || "";
         renderBarcode(jugadaID);
 
         var jugadaKey = (jugada. FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
 
-        var detallesFiltrados = detalles.filter(d => {
+        // Filter detalles with VENTAS validation
+        var detallesFiltrados = detalles. filter(d => {
           var dFecha = d.FECHA || d.fecha || "";
           var dJuega = d.JUEGA || d.juega || "";
           var estadoDetalle = (d.ESTADO || d.estado || "").toString().trim().toUpperCase();
@@ -488,6 +490,7 @@
           var userMatches = equalsUser(dUsuario, currentUser);
           var detalleActivo = estadoDetalle === "ACTIVO";
           
+          // Check if related VENTA is also ACTIVO
           var ventaActiva = false;
           if (ventaId && ventasMap.has(ventaId)) {
             var ventaRecord = ventasMap.get(ventaId);
@@ -498,17 +501,17 @@
           return detalleActivo && ventaActiva && keyMatches && userMatches;
         });
 
-        detallesFiltrados.sort(function(a, b){
+        detallesFiltrados. sort(function(a, b){
           var numA = a.NUMERO || a.numero || "";
           var numB = b.NUMERO || b.numero || "";
           var nA = parseInt(numA, 10);
           var nB = parseInt(numB, 10);
-          if(!isNaN(nA) && !isNaN(nB)) return nA - nB;
+          if(! isNaN(nA) && !isNaN(nB)) return nA - nB;
           return (''+numA).localeCompare((''+numB), 'es', {numeric: true, sensitivity:'base'});
         });
 
         var totalNumeros = detallesFiltrados.length;
-        var totalVenta = detallesFiltrados.reduce(function(sum, det) {
+        var totalVenta = detallesFiltrados. reduce(function(sum, det) {
           var val = (det.VALOR || det.valor || "0").toString().replace(",", ".");
           var num = parseFloat(val);
           return sum + (isNaN(num) ? 0 : num);
@@ -521,7 +524,7 @@
         pagesContainer.innerHTML = "";
 
         detallePages.forEach(function(pageDetalles, idx){
-          var pageDiv = document.createElement("div");
+          var pageDiv = document. createElement("div");
           pageDiv.className = "detalle-page" + (idx === 0 ?  " first" : "");
           pageDiv.innerHTML = 
             (idx === 0 ? '<div class="detalle-title">Detalle</div>' : '') +
@@ -576,20 +579,20 @@
             filename: 'jugada. pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true },
-            jsPDF: { unit:  'in', format: 'letter', orientation: 'portrait' }
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
           };
           html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
             if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })] })) {
               navigator.share({
                 files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })],
-                title:  'Resumen de Jugada',
+                title: 'Resumen de Jugada',
                 text: 'Aquí está el archivo PDF de la jugada.'
               }).catch(function(){});
             } else {
               var url = URL.createObjectURL(pdfBlob);
               var a = document.createElement('a');
               a.href = url;
-              a.download = 'jugada.pdf';
+              a.download = 'jugada. pdf';
               document.body.appendChild(a);
               a.click();
               setTimeout(function() {
