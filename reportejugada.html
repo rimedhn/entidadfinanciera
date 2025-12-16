@@ -412,7 +412,7 @@
       // Optional explicit user param
       var paramUsuario = getQueryParam("usuario") || getQueryParam("user") || getQueryParam("u");
 
-      if (! jugadaID) {
+      if (!jugadaID) {
         // When no id provided, we need usuario param to show data (can't infer)
         if (!paramUsuario) {
           document.getElementById("nodata").textContent = "Proporcione el parámetro ? id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte. ";
