@@ -1,639 +1,263 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resumen de Jugada - Gestión de Números</title>
-  <link rel="icon" href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" type="image/x-icon">
-  <style>
-    @page {
-      size: letter;
-      margin: 0.7in 0.5in 1.1in 0.5in;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background:  #fff;
-      margin: 0;
-      padding: 0;
-    }
-    .jugada-carta {
-      width: 8in;
-      margin: auto;
-      min-height: 10in;
-      background: #fff;
-      padding: 0;
-      position: relative;
-    }
-    #loadingMsg {
-      display: none;
-      text-align: center;
-      font-size: 1.25em;
-      color: #226;
-      margin:  24px 0;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .main-content {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-    }
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-    .header-left {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 53%;
-      min-width: 340px;
-      margin-top: 7px;
-    }
-    .logo-img {
-      width: 110px;
-      height: 110px;
-      object-fit: contain;
-      margin-right: 15px;
-      background: #fff;
-    }
-    .header-business {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .titulo-negocio {
-      font-size: 1.48em;
-      font-weight:  bold;
-      color: #333;
-      margin-bottom: 3px;
-      margin-top: 7px;
-      word-break: break-word;
-    }
-    .resumen-label {
-      font-size: 1.08em;
-      color: #555;
-      margin-bottom: 0px;
-      margin-left: 1px;
-      font-weight: bold;
-      word-break: break-word;
-    }
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      width: 47%;
-      min-width:  200px;
-      margin-top: 7px;
-    }
-    .barcode-container {
-      text-align: right;
-      margin-bottom: 8px;
-    }
-    #barcode {
-      width: 160px ! important;
-      height: 70px !important;
-      object-fit: contain;
-      display: block;
-      margin:  0 0 2px auto;
-    }
-    .codigo-jugada {
-      font-size:  0.95em;
-      color: #777;
-      margin-top: 0px;
-      text-align: right;
-      word-break: break-word;
-    }
-    .info-table {
-      width: 100%;
-      margin-bottom: 15px;
-      border-collapse: collapse;
-      font-size: 1.08em;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .info-table td {
-      padding: 7px 12px;
-      font-size: 1em;
-      border:  none;
-      background: #fff;
-      vertical-align: top;
-    }
-    .info-label {
-      font-weight: bold;
-      color: #444;
-      width: 33%;
-      vertical-align: top;
-      padding-bottom: 3px;
-    }
-    .info-value {
-      font-size: 1em;
-      color: #222;
-      padding-bottom: 3px;
-    }
-    .detalle-section,
-    .detalle-page {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .detalle-title {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.15em;
-      margin:  2px 0 8px 0;
-      color:  #444;
-      letter-spacing: 1px;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .detalle-grid-wrapper {
-      page-break-inside: avoid;
-      break-inside: avoid;
-      width: 100%;
-      margin-bottom: 0;
-    }
-    .detalle-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 14px;
-      margin-bottom: 14px;
-      width: 100%;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .detalle-card {
-      background: #fafafa;
-      border: 1px solid #eaeaea;
-      border-radius:  6px;
-      padding:  10px 10px 7px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      page-break-inside: avoid;
-      break-inside: avoid;
-      min-width: 0;
-      min-height: 60px;
-    }
-    .numero {
-      font-size: 1.2em;
-      font-weight: bold;
-      color:  #266;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-    .valor {
-      font-size: 1.08em;
-      color: #444;
-      margin-bottom: 2px;
-      word-break:  break-word;
-    }
-    .observaciones {
-      background: #f1f1f1;
-      padding: 9px 12px;
-      border-radius:  4px;
-      font-size: 1em;
-      color: #444;
-      margin-bottom: 8px;
-      margin-top: 10px;
-      width: 96%;
-      word-break: break-word;
-    }
-    .footer {
-      text-align: right;
-      font-size: 0.95em;
-      color: #888;
-      margin-top: 12px;
-    }
-    .no-data {
-      text-align: center;
-      color: #b00;
-      font-size: 1.05em;
-      margin-top:  10px;
-    }
-    #printBtn {
-      display: none;
-      margin:  18px auto 0 auto;
-      font-size: 1.1em;
-      padding: 8px 24px;
-      background: #226;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 6px #aaa2;
-    }
-    #printBtn:active {
-      background: #144;
-    }
-    @media print {
-      #printBtn, #loadingMsg {
-        display: none ! important;
-      }
-      .jugada-carta {
-        background: #fff !important;
-        page-break-after: always;
-      }
-      .main-content, 
-      .info-table, 
-      .detalle-section, 
-      .detalle-page,
-      .detalle-title, 
-      .detalle-grid-wrapper, 
-      .detalle-grid, 
-      .detalle-card {
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-      .detalle-page {
-        page-break-before: always;
-        break-before: page;
-      }
-      .detalle-page. first {
-        page-break-before: auto ! important;
-        break-before: auto !important;
-      }
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min. js"></script>
+<meta charset="UTF-8">
+<title>Resumen de Jugada</title>
+
+<!-- FAVICON -->
+<link rel="icon"
+      href="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true"
+      type="image/png">
+
+<!-- LIBRERÍAS -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+<style>
+/* ================== IMPRESIÓN ================== */
+@page{
+  size: letter;
+  margin: 0.6in;
+}
+
+body{
+  font-family: Arial, sans-serif;
+  background:#fff;
+  margin:0;
+}
+
+#loadingMsg{
+  text-align:center;
+  font-size:18px;
+  margin:25px;
+  font-weight:bold;
+}
+
+.no-data{
+  text-align:center;
+  color:#b00;
+  font-size:16px;
+  margin-top:25px;
+}
+
+/* ================== HEADER ================== */
+.logo-header{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+.logo-header img{
+  width:95px;
+  height:auto;
+}
+
+.logo-text h2{
+  margin:0;
+}
+
+.logo-text small{
+  color:#555;
+}
+
+/* ================== GRID ================== */
+.detalle-grid{
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:10px;
+}
+
+.detalle-card{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center;
+  border-radius:5px;
+  page-break-inside:avoid;
+  break-inside:avoid;
+}
+
+.numero{
+  font-weight:bold;
+  color:#224;
+}
+
+.valor{
+  color:#444;
+}
+
+/* ================== PRINT ================== */
+@media print{
+
+  #loadingMsg,
+  #nodata{
+    display:none !important;
+  }
+
+  body{
+    margin:0;
+  }
+
+  .detalle-grid{
+    grid-template-columns:repeat(8,1fr);
+  }
+
+  .detalle-card{
+    page-break-inside:avoid;
+    break-inside:avoid;
+  }
+}
+</style>
 </head>
+
 <body>
-  <div id="loadingMsg">CARGANDO DATOS...</div>
-  <button id="printBtn">Exportar a PDF</button>
-  <div class="jugada-carta" id="jugadaCarta">
-    <div class="main-content">
-      <div class="header-row">
-        <div class="header-left">
-          <img class="logo-img" id="logoImg" src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true" alt="Logo Gestión de Números" />
-          <div class="header-business">
-            <div class="titulo-negocio">ENTIDAD FINANCIERA</div>
-            <div class="resumen-label">Resumen de Jugada</div>
-            <div class="resumen-label" id="referencia"></div>
-          </div>
-        </div>
-        <div class="header-right">
-          <div class="barcode-container">
-            <svg id="barcode"></svg>
-          </div>
-          <div class="codigo-jugada">ID Jugada: <span id="idjugada"></span></div>
-        </div>
-      </div>
-      <table class="info-table">
-        <tr>
-          <td class="info-label">Fecha</td>
-          <td class="info-label">Total Números</td>
-          <td class="info-label">Usuario</td>
-        </tr>
-        <tr>
-          <td class="info-value"><span id="fecha"></span></td>
-          <td class="info-value"><span id="totalNumeros"></span></td>
-          <td class="info-value"><span id="usuario"></span></td>
-        </tr>
-      </table>
-      <table class="info-table">
-        <tr>
-          <td class="info-label">Hora</td>
-          <td class="info-label">Total Venta</td>
-          <td class="info-label">Observaciones</td>
-        </tr>
-        <tr>
-          <td class="info-value"><span id="hora" ></span></td>
-          <td class="info-value"><span id="totalVenta" ></span></td>
-          <td class="info-value"><span id="observaciones" ></span></td>
-        </tr>
-      </table>
-      <div id="detallePagesContainer"></div>
-    </div>
-    <div class="footer">
-      <span id="fechaimpresion"></span>
-    </div>
-    <div id="nodata" class="no-data" style="display: none;">
-      No se encontró información activa para esta jugada o no pertenece al usuario actual.
+
+<div id="loadingMsg">CARGANDO DATOS...</div>
+<div id="nodata" class="no-data" style="display:none"></div>
+
+<div id="jugadaCarta" style="display:none;padding:20px">
+
+  <!-- ENCABEZADO -->
+  <div class="logo-header">
+    <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true">
+    <div class="logo-text">
+      <h2>ENTIDAD FINANCIERA</h2>
+      <small>Resumen de Jugada</small>
     </div>
   </div>
-  <script>
-    var opensheetUrlJugada = "https://opensheet.elk.sh/1QJgFNnXObYHWfe7PzrESwi4_YO3IZtzk2NToyO12bS8/JUGADA";
-    var opensheetUrlDetalle = "https://opensheet.elk.sh/1so5d-hNEr05ElnGZy6VnUUJ8IsKC8pgdCwIMkORflkw/DETALLE";
-    var opensheetUrlVentas = "https://opensheet.elk.sh/1q8MUq8L0XtWX7uKRcepZys-No48xYKyGX1uUjTAwJgk/VENTAS";
 
-    function getQueryParam(param) {
-      var urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-    var jugadaID = getQueryParam("id");
-    document.getElementById("idjugada").textContent = jugadaID || "";
+  <p><b>ID Jugada:</b> <span id="idjugada"></span></p>
+  <p><b>Fecha:</b> <span id="fecha"></span></p>
+  <p><b>Hora:</b> <span id="hora"></span></p>
+  <p><b>Usuario:</b> <span id="usuario"></span></p>
+  <p><b>Total Números:</b> <span id="totalNumeros"></span></p>
+  <p><b>Total Venta:</b> <span id="totalVenta"></span></p>
 
-    var now = new Date();
-    document.querySelector(".footer #fechaimpresion").textContent =
-      "Impreso:  " + now.toLocaleDateString() + " " + now.toLocaleTimeString();
+  <svg id="barcode"></svg>
 
-    function renderBarcode(id) {
-      JsBarcode("#barcode", id || "", {
-        format: "CODE128",
-        width: 2,
-        height: 90,
-        displayValue: false,
-        margin: 0,
-      });
-    }
+  <h3>Detalle</h3>
+  <div id="detallePagesContainer" class="detalle-grid"></div>
 
-    function formatLempirasSinDecimales(num) {
-      if (isNaN(num)) return "L 0";
-      return "L " + Math.round(num).toLocaleString('es-HN', {maximumFractionDigits: 0});
-    }
+</div>
 
-    function paginarDetalles(detalles, firstPage, nextPages) {
-      var result = [];
-      var start = 0;
-      if (detalles.length <= firstPage) {
-        result.push(detalles);
-      } else {
-        result.push(detalles.slice(0, firstPage));
-        start = firstPage;
-        while (start < detalles.length) {
-          result.push(detalles.slice(start, start + nextPages));
-          start += nextPages;
-        }
-      }
-      return result;
-    }
+<script>
+/* ================= CONFIG ================= */
 
-    function toDataURL(url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-          callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-      };
-      xhr.onerror = function() {
-        callback(null);
-      };
-      xhr.open('GET', url);
-      xhr.responseType = 'blob';
-      xhr.send();
-    }
+const URL_JUGADA  = "https://opensheet.elk.sh/1QJgFNnXObYHWfe7PzrESwi4_YO3IZtzk2NToyO12bS8/JUGADA";
+const URL_DETALLE = "https://opensheet.elk.sh/1so5d-hNEr05ElnGZy6VnUUJ8IsKC8pgdCwIMkORflkw/DETALLE";
+const URL_VENTAS  = "https://opensheet.elk.sh/1q8MUq8L0XtWX7uKRcepZys-No48xYKyGX1uUjTAwJgk/VENTAS";
 
-    function prepareLogoForPDF(callback) {
-      var img = document.getElementById('logoImg');
-      var url = img.getAttribute('src');
-      if (url.startsWith('data:')) {
-        callback();
-        return;
-      }
-      toDataURL(url, function(dataUrl) {
-        if (dataUrl) {
-          img.setAttribute('src', dataUrl);
-        }
-        callback();
-      });
-    }
+/* ================= HELPERS ================= */
 
-    function equalsUser(a, b) {
-      if (! a && !b) return true;
-      return ('' + (a || '')).toString().trim().toLowerCase() === ('' + (b || '')).toString().trim().toLowerCase();
-    }
+const getParam = p => new URLSearchParams(location.search).get(p);
 
-    function cargarJugada() {
-      document.getElementById("loadingMsg").style.display = "block";
-      document.getElementById("jugadaCarta").style.display = "none";
-      document.getElementById("printBtn").style.display = "none";
-      document.getElementById("nodata").style.display = "none";
+function normalizarClave(fecha, hora){
+  return (fecha + " " + hora)
+    .toString()
+    .trim()
+    .replace(/\s+/g," ")
+    .toUpperCase();
+}
 
-      // Optional explicit user param
-      var paramUsuario = getQueryParam("usuario") || getQueryParam("user") || getQueryParam("u");
+function equalsUser(a,b){
+  return (a||"").toString().trim().toUpperCase() ===
+         (b||"").toString().trim().toUpperCase();
+}
 
-      if (!jugadaID) {
-        // When no id provided, we need usuario param to show data (can't infer)
-        if (!paramUsuario) {
-          document.getElementById("nodata").textContent = "Proporcione el parámetro ? id=<ID_JUGADA>&usuario=<USUARIO> para ver el reporte. ";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          return;
-        }
-      }
+function showError(msg){
+  document.getElementById("loadingMsg").style.display="none";
+  document.getElementById("jugadaCarta").style.display="none";
+  document.getElementById("nodata").style.display="block";
+  document.getElementById("nodata").textContent=msg;
+}
 
-      Promise.all([
-        fetch(opensheetUrlJugada).then(resp => resp.json()).catch(e => { console.error("Error Jugada:", e); return []; }),
-        fetch(opensheetUrlDetalle).then(resp => resp.json()).catch(e => { console.error("Error Detalle:", e); return []; }),
-        fetch(opensheetUrlVentas).then(resp => resp.json()).catch(e => { console.error("Error Ventas:", e); return []; })
-      ])
-      .then(([jugadas, detalles, ventas]) => {
-        // Aseguramos que las variables sean arrays aunque la carga haya fallado
-        jugadas = Array.isArray(jugadas) ? jugadas : [];
-        detalles = Array.isArray(detalles) ? detalles : [];
-        ventas = Array.isArray(ventas) ? ventas : [];
+/* ================= MAIN ================= */
 
-        // first find the jugada by id (without user filtering), to be able to infer user if needed
-        var jugada = null;
-        if (jugadaID) {
-          jugada = jugadas.find(j => (j.ID == jugadaID || j.id == jugadaID));
-        } else {
-          // No id:  cannot continue (we required usuario param above), but keep for safety
-          jugada = null;
-        }
+const JUGADA_ID = getParam("id");
+document.getElementById("idjugada").textContent = JUGADA_ID || "";
 
-        if (!jugada) {
-          document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          return;
-        }
+if(!JUGADA_ID){
+  showError("Debe proporcionar ?id=");
+  throw "";
+}
 
-        // Determine current user:  prefer explicit param, otherwise infer from jugada fields
-        var inferredUser = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
-        var currentUser = paramUsuario || inferredUser;
+Promise.all([
+  fetch(URL_JUGADA).then(r=>r.json()),
+  fetch(URL_DETALLE).then(r=>r.json()),
+  fetch(URL_VENTAS).then(r=>r.json())
+]).then(([jugadas, detalles, ventas])=>{
 
-        if (!currentUser) {
-          document.getElementById("nodata").textContent = "No se pudo determinar el usuario actual.  Use ? usuario=<USUARIO> en la URL.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          return;
-        }
+  const jugada = jugadas.find(j =>
+    (j.ID || "").toString().trim() === JUGADA_ID
+  );
 
-        // Verify that the jugada belongs to the currentUser (if paramUsuario provided enforce it)
-        var jugadaUserField = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || "";
-        if (paramUsuario) {
-          if (!equalsUser(jugadaUserField, currentUser)) {
-            document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
-            document.getElementById("nodata").style.display = "block";
-            document.getElementById("loadingMsg").style.display = "none";
-            return;
-          }
-        } else {
-          // if no param provided, we already inferred currentUser from jugada so proceed
-        }
+  if(!jugada){
+    showError("No existe la jugada solicitada");
+    return;
+  }
 
-        // Populate header fields from jugada
-        document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
-        document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
-        // Prefer explicit display name field if exists
-        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
-        document.getElementById("observaciones").textContent = jugada.OBSERVACIONES || jugada.observaciones || "";
-        document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
-        renderBarcode(jugadaID);
+  const currentUser = jugada.USUARIO || "";
+  const claveJugada = normalizarClave(jugada.FECHA, jugada.HORA);
 
-        var jugadaKey = (jugada.FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
+  document.getElementById("fecha").textContent = jugada.FECHA || "";
+  document.getElementById("hora").textContent  = jugada.HORA || "";
+  document.getElementById("usuario").textContent = currentUser;
 
-        // Crear mapa de Ventas para consulta rápida (ID -> ESTADO)
-        var ventasMap = new Map();
-        ventas.forEach(v => {
-          var ventaId = (v.ID || v.id || "").toString().trim();
-          if (ventaId) {
-            var estado = (v.ESTADO || v.estado || "").toUpperCase().trim();
-            ventasMap.set(ventaId, estado);
-          }
-        });
+  JsBarcode("#barcode", JUGADA_ID, {displayValue:false});
 
-        // Filter detalles requiring: 
-        // - estado ACTIVO
-        // - matching fecha+JUEGA (same key)
-        // - USUARIO (or usuario) equals currentUser
-        // - ESTADO de la VENTA asociada sea ACTIVO (nuevo filtro)
-        var detallesFiltrados = detalles.filter(d => {
-          var dFecha = d.FECHA || d.fecha || "";
-          var dJuega = d.JUEGA || d.juega || "";
-          var estadoDetalle = (d.ESTADO || d.estado || "").toUpperCase().trim();
-          var dUsuario = d.USUARIO || d.usuario || "";
-          
-          var keyMatches = (dFecha + dJuega) === jugadaKey;
-          var userMatches = equalsUser(dUsuario, currentUser);
-          
-          // Verificar estado de la VENTA (columna VENTA en DETALLE)
-          var ventaId = (d.VENTA || d.venta || "").toString().trim();
-          var estadoVenta = ventasMap.get(ventaId) || "ANULADO"; // Si no encuentra la Venta ID, asume ANULADO
-          var ventaEsActivo = estadoVenta === "ACTIVO";
+  const ventasMap = new Map();
+  ventas.forEach(v=>{
+    const id = (v.ID || "").toString().trim();
+    const estado = (v.ESTADO || "").toUpperCase().trim();
+    if(id) ventasMap.set(id, estado);
+  });
 
-          return estadoDetalle === "ACTIVO" && keyMatches && userMatches && ventaEsActivo;
-        });
+  const detallesFiltrados = detalles.filter(d=>{
+    const claveDetalle = normalizarClave(d.FECHA, d.JUEGA);
+    const estadoDetalle = (d.ESTADO || "").toUpperCase().trim();
+    const ventaId = (d.VENTA || "").toString().trim();
+    const estadoVenta = ventasMap.get(ventaId);
 
-        detallesFiltrados.sort(function(a, b){
-          var numA = a.NUMERO || a.numero || "";
-          var numB = b.NUMERO || b.numero || "";
-          var nA = parseInt(numA, 10);
-          var nB = parseInt(numB, 10);
-          if(! isNaN(nA) && !isNaN(nB)) return nA - nB;
-          return (''+numA).localeCompare((''+numB), 'es', {numeric: true, sensitivity:'base'});
-        });
+    return (
+      claveDetalle === claveJugada &&
+      estadoDetalle === "ACTIVO" &&
+      equalsUser(d.USUARIO, currentUser) &&
+      (!ventaId || estadoVenta === "ACTIVO")
+    );
+  });
 
-        var totalNumeros = detallesFiltrados.length;
-        var totalVenta = detallesFiltrados.reduce(function(sum, det) {
-          var val = (det.VALOR || det.valor || "0").toString().replace(",", ".");
-          var num = parseFloat(val);
-          return sum + (isNaN(num) ? 0 : num);
-        }, 0);
-        document.getElementById("totalNumeros").textContent = totalNumeros;
-        document.getElementById("totalVenta").textContent = formatLempirasSinDecimales(totalVenta);
+  if(detallesFiltrados.length === 0){
+    showError("No se encontraron registros activos para esta jugada");
+    return;
+  }
 
-        var detallePages = paginarDetalles(detallesFiltrados, 48, 80);
-        var pagesContainer = document.getElementById("detallePagesContainer");
-        pagesContainer.innerHTML = "";
+  let totalVenta = 0;
+  detallesFiltrados.forEach(d=>{
+    const num = d.NUMERO || "";
+    const val = parseFloat((d.VALOR || "0").toString().replace(",", "."));
+    totalVenta += isNaN(val)?0:val;
 
-        detallePages.forEach(function(pageDetalles, idx){
-          var pageDiv = document.createElement("div");
-          pageDiv.className = "detalle-page" + (idx === 0 ?  " first" : "");
-          pageDiv.innerHTML = 
-            (idx === 0 ? '<div class="detalle-title">Detalle</div>' : '') +
-            '<div class="detalle-grid-wrapper">' +
-            '<div class="detalle-grid">' +
-            pageDetalles.map(function(det){
-              var numero = det.NUMERO || det.numero || "";
-              var valor = det.VALOR || det.valor || "";
-              var valorFormateado = formatLempirasSinDecimales(parseFloat(valor.toString().replace(",", ".")));
-              return `<div class="detalle-card">
-                <div class="numero"># ${numero}</div>
-                <div class="valor">${valorFormateado}</div>
-              </div>`;
-            }).join('') +
-            '</div></div>';
-          pagesContainer.appendChild(pageDiv);
-        });
+    document.getElementById("detallePagesContainer").innerHTML += `
+      <div class="detalle-card">
+        <div class="numero">#${num}</div>
+        <div class="valor">L ${Math.round(val)}</div>
+      </div>`;
+  });
 
-        if (detallesFiltrados.length === 0) {
-          document.getElementById("nodata").textContent = "No se encontraron detalles activos para esta jugada y usuario.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("jugadaCarta").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
-          document.getElementById("printBtn").style.display = "none";
-          return;
-        }
+  document.getElementById("totalNumeros").textContent = detallesFiltrados.length;
+  document.getElementById("totalVenta").textContent =
+    "L " + Math.round(totalVenta).toLocaleString();
 
-        document.getElementById("jugadaCarta").style.display = "block";
-        document.getElementById("loadingMsg").style.display = "none";
-        document.getElementById("printBtn").style.display = "block";
-      })
-      .catch(function(e){
-        document.getElementById("nodata").style.display = "block";
-        document.getElementById("loadingMsg").style.display = "none";
-        document.getElementById("jugadaCarta").style.display = "block";
-        document.getElementById("printBtn").style.display = "none";
-      });
-    }
+  document.getElementById("loadingMsg").style.display="none";
+  document.getElementById("jugadaCarta").style.display="block";
 
-    window.onload = cargarJugada;
+  /* ===== IMPRESIÓN AUTOMÁTICA ===== */
+  setTimeout(()=>{ window.print(); }, 800);
 
-    function isMobileDevice() {
-      return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent);
-    }
+}).catch(err=>{
+  console.error(err);
+  showError("Error cargando los datos");
+});
+</script>
 
-    document.getElementById("printBtn").onclick = function() {
-      if (isMobileDevice()) {
-        prepareLogoForPDF(function() {
-          var element = document.getElementById("jugadaCarta");
-          var opt = {
-            margin: [0.4, 0.3, 0.7, 0.3], // top, left, bottom, right
-            filename: 'jugada.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-          };
-          html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
-            if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })] })) {
-              navigator.share({
-                files: [new File([pdfBlob], 'jugada.pdf', { type: 'application/pdf' })],
-                title: 'Resumen de Jugada',
-                text: 'Aquí está el archivo PDF de la jugada.'
-              }).catch(function(){});
-            } else {
-              var url = URL.createObjectURL(pdfBlob);
-              var a = document.createElement('a');
-              a.href = url;
-              a.download = 'jugada.pdf';
-              document.body.appendChild(a);
-              a.click();
-              setTimeout(function() {
-                URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-              }, 500);
-            }
-          });
-        });
-      } else {
-        window.print();
-      }
-    };
-
-    function updateExportButton() {
-      var btn = document.getElementById("printBtn");
-      if (isMobileDevice()) {
-        btn.textContent = "Compartir PDF";
-      } else {
-        btn.textContent = "Imprimir";
-        btn.onclick = function() {
-          window.print();
-        };
-      }
-    }
-    updateExportButton();
-  </script>
 </body>
 </html>
