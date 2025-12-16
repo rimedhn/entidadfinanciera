@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<! DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -8,7 +8,7 @@
   <style>
     @page {
       size: letter;
-      margin: 0.7in 0.5in 1.1in 0.5in;
+      margin: 0.7in 0.5in 1. 1in 0.5in;
     }
     body {
       font-family: Arial, sans-serif;
@@ -88,7 +88,7 @@
       align-items: flex-end;
       width: 47%;
       min-width: 200px;
-      margin-top: 7px;
+      margin-top:  7px;
     }
     .barcode-container {
       text-align: right;
@@ -99,7 +99,7 @@
       height: 70px !important;
       object-fit: contain;
       display: block;
-      margin: 0 0 2px auto;
+      margin:  0 0 2px auto;
     }
     .codigo-jugada {
       font-size:  0.95em;
@@ -130,7 +130,7 @@
       vertical-align: top;
       padding-bottom: 3px;
     }
-    . info-value {
+    .info-value {
       font-size: 1em;
       color: #222;
       padding-bottom: 3px;
@@ -147,7 +147,7 @@
       font-weight: bold;
       font-size: 1.15em;
       margin:  2px 0 8px 0;
-      color:  #444;
+      color: #444;
       letter-spacing: 1px;
       page-break-inside: avoid;
       break-inside: avoid;
@@ -160,9 +160,9 @@
     }
     .detalle-grid {
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
+      grid-template-columns:  repeat(8, 1fr);
       gap: 14px;
-      margin-bottom:  14px;
+      margin-bottom: 14px;
       width: 100%;
       page-break-inside: avoid;
       break-inside: avoid;
@@ -183,7 +183,7 @@
     . numero {
       font-size: 1.2em;
       font-weight: bold;
-      color: #266;
+      color:  #266;
       margin-bottom: 4px;
       word-break: break-word;
     }
@@ -218,7 +218,7 @@
     }
     #printBtn {
       display: none;
-      margin:  18px auto 0 auto;
+      margin: 18px auto 0 auto;
       font-size: 1.1em;
       padding: 8px 24px;
       background: #226;
@@ -263,7 +263,7 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode. all.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min. js"></script>
 </head>
 <body>
   <div id="loadingMsg">CARGANDO DATOS...</div>
@@ -435,12 +435,12 @@
 
         if (!jugada) {
           document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
-          document.getElementById("nodata").style.display = "block";
-          document.getElementById("loadingMsg").style.display = "none";
+          document. getElementById("nodata").style.display = "block";
+          document. getElementById("loadingMsg").style.display = "none";
           return;
         }
 
-        var jugadaUserField = jugada. USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
+        var jugadaUserField = jugada. USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada. NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || jugadaUserField;
 
         if (!currentUser) {
@@ -450,7 +450,7 @@
           return;
         }
 
-        if (!equalsUser(jugadaUserField, currentUser)) {
+        if (! equalsUser(jugadaUserField, currentUser)) {
           document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
           document. getElementById("nodata").style.display = "block";
           document. getElementById("loadingMsg").style.display = "none";
@@ -502,7 +502,7 @@
         });
 
         var totalNumeros = detallesFiltrados.length;
-        var totalVenta = detallesFiltrados.reduce(function(sum, det) {
+        var totalVenta = detallesFiltrados. reduce(function(sum, det) {
           var val = (det.VALOR || det.valor || "0").toString().replace(",", ".");
           var num = parseFloat(val);
           return sum + (isNaN(num) ? 0 : num);
@@ -515,14 +515,14 @@
         pagesContainer.innerHTML = "";
 
         detallePages.forEach(function(pageDetalles, idx){
-          var pageDiv = document.createElement("div");
+          var pageDiv = document. createElement("div");
           pageDiv.className = "detalle-page" + (idx === 0 ?  " first" : "");
           pageDiv.innerHTML = 
             (idx === 0 ? '<div class="detalle-title">Detalle</div>' : '') +
             '<div class="detalle-grid-wrapper">' +
             '<div class="detalle-grid">' +
             pageDetalles.map(function(det){
-              var numero = det.NUMERO || det.numero || "";
+              var numero = det.NUMERO || det. numero || "";
               var valor = det.VALOR || det.valor || "";
               var valorFormateado = formatLempirasSinDecimales(parseFloat(valor. toString().replace(",", ".")));
               return `<div class="detalle-card">
@@ -545,7 +545,7 @@
         document.getElementById("printBtn").style.display = "block";
       })
       .catch(function(e){
-        document.getElementById("nodata").textContent = "Ocurrió un error grave al procesar los datos.  Por favor, revise la consola. ";
+        document.getElementById("nodata").textContent = "Ocurrió un error grave al procesar los datos. Por favor, revise la consola. ";
         document.getElementById("nodata").style.display = "block";
         document.getElementById("loadingMsg").style.display = "none";
         document.getElementById("jugadaCarta").style.display = "block";
@@ -566,9 +566,9 @@
           var element = document.getElementById("jugadaCarta");
           var opt = {
             margin: [0.4, 0.3, 0.7, 0.3],
-            filename: 'jugada.pdf',
+            filename: 'jugada. pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
+            html2canvas:  { scale: 2, useCORS: true },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
           };
           html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
@@ -582,7 +582,7 @@
               var url = URL.createObjectURL(pdfBlob);
               var a = document.createElement('a');
               a.href = url;
-              a.download = 'jugada.pdf';
+              a.download = 'jugada. pdf';
               document.body.appendChild(a);
               a.click();
               setTimeout(function() {
@@ -604,7 +604,7 @@
       } else {
         btn.textContent = "Imprimir";
         btn.onclick = function() {
-          window. print();
+          window.print();
         };
       }
     }
