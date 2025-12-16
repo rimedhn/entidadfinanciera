@@ -431,7 +431,7 @@
         // Aseguramos que las variables sean arrays aunque la carga haya fallado
         jugadas = Array.isArray(jugadas) ? jugadas : [];
         detalles = Array.isArray(detalles) ? detalles : [];
-        ventas = Array. isArray(ventas) ? ventas : [];
+        ventas = Array.isArray(ventas) ? ventas : [];
 
         // first find the jugada by id (without user filtering), to be able to infer user if needed
         var jugada = null;
@@ -444,13 +444,13 @@
 
         if (!jugada) {
           document.getElementById("nodata").textContent = "No se encontró la jugada especificada.";
-          document. getElementById("nodata").style.display = "block";
-          document. getElementById("loadingMsg").style.display = "none";
+          document.getElementById("nodata").style.display = "block";
+          document.getElementById("loadingMsg").style.display = "none";
           return;
         }
 
         // Determine current user:  prefer explicit param, otherwise infer from jugada fields
-        var inferredUser = jugada.USUARIO || jugada.usuario || jugada. NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
+        var inferredUser = jugada.USUARIO || jugada.usuario || jugada.NOMBREUSUARIO || jugada.nombreusuario || jugada.NOMBRE || jugada.nombre || "";
         var currentUser = paramUsuario || inferredUser;
 
         if (!currentUser) {
@@ -465,8 +465,8 @@
         if (paramUsuario) {
           if (!equalsUser(jugadaUserField, currentUser)) {
             document.getElementById("nodata").textContent = "La jugada no pertenece al usuario especificado.";
-            document. getElementById("nodata").style.display = "block";
-            document. getElementById("loadingMsg").style.display = "none";
+            document.getElementById("nodata").style.display = "block";
+            document.getElementById("loadingMsg").style.display = "none";
             return;
           }
         } else {
@@ -477,12 +477,12 @@
         document.getElementById("fecha").textContent = jugada.FECHA || jugada.fecha || "";
         document.getElementById("hora").textContent = jugada.HORA || jugada.hora || "";
         // Prefer explicit display name field if exists
-        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada. usuario || jugada.USUARIO || currentUser;
-        document.getElementById("observaciones").textContent = jugada. OBSERVACIONES || jugada.observaciones || "";
+        document.getElementById("usuario").textContent = jugada.NOMBREUSUARIO || jugada.usuario || jugada.USUARIO || currentUser;
+        document.getElementById("observaciones").textContent = jugada.OBSERVACIONES || jugada.observaciones || "";
         document.getElementById("referencia").textContent = jugada.ID || jugada.id || "";
         renderBarcode(jugadaID);
 
-        var jugadaKey = (jugada. FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
+        var jugadaKey = (jugada.FECHA || jugada.fecha || "") + (jugada.HORA || jugada.hora || "");
 
         // Crear mapa de Ventas para consulta rápida (ID -> ESTADO)
         var ventasMap = new Map();
@@ -526,7 +526,7 @@
         });
 
         var totalNumeros = detallesFiltrados.length;
-        var totalVenta = detallesFiltrados. reduce(function(sum, det) {
+        var totalVenta = detallesFiltrados.reduce(function(sum, det) {
           var val = (det.VALOR || det.valor || "0").toString().replace(",", ".");
           var num = parseFloat(val);
           return sum + (isNaN(num) ? 0 : num);
@@ -548,14 +548,14 @@
             pageDetalles.map(function(det){
               var numero = det.NUMERO || det.numero || "";
               var valor = det.VALOR || det.valor || "";
-              var valorFormateado = formatLempirasSinDecimales(parseFloat(valor. toString().replace(",", ".")));
+              var valorFormateado = formatLempirasSinDecimales(parseFloat(valor.toString().replace(",", ".")));
               return `<div class="detalle-card">
                 <div class="numero"># ${numero}</div>
                 <div class="valor">${valorFormateado}</div>
               </div>`;
             }).join('') +
             '</div></div>';
-          pagesContainer. appendChild(pageDiv);
+          pagesContainer.appendChild(pageDiv);
         });
 
         if (detallesFiltrados.length === 0) {
