@@ -10,7 +10,7 @@
 <style>
 @page{
   size: letter;
-  margin: 0.6in 0.6in 1.2in 0.6in;
+  margin: 0.6in;
 }
 
 body{
@@ -22,7 +22,7 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 .header-left{
@@ -31,10 +31,23 @@ body{
   gap:15px;
 }
 
-.header-left img{ width:90px; }
+.header-left img{
+  width:90px;
+}
 
 .header-right{
   text-align:right;
+}
+
+.subtitulo{
+  font-size:13px;
+  color:#555;
+}
+
+.fecha-impresion{
+  font-size:11px;
+  color:#666;
+  margin-top:2px;
 }
 
 .info-grid{
@@ -42,7 +55,7 @@ body{
   grid-template-columns:repeat(3,1fr);
   gap:6px 14px;
   font-size:13px;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 .detalle-grid{
@@ -59,22 +72,13 @@ body{
   break-inside:avoid;
 }
 
-.numero{ font-weight:bold; color:#224; }
-.valor{ color:#444; }
-
-.footer-print{
-  position:fixed;
-  bottom:0.15in;
-  left:0.6in;
-  right:0.6in;
-  display:flex;
-  justify-content:space-between;
-  font-size:11px;
-  color:#555;
+.numero{
+  font-weight:bold;
+  color:#224;
 }
 
-.page-counter::after{
-  content:"Página " counter(page) " de " counter(pages);
+.valor{
+  color:#444;
 }
 </style>
 </head>
@@ -88,10 +92,10 @@ body{
       <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true">
       <div>
         <h2 style="margin:0">ENTIDAD FINANCIERA</h2>
-        <small>Resumen de Jugada</small>
+        <div class="subtitulo">Resumen de Jugada</div>
+        <div class="fecha-impresion" id="fechaImpresion"></div>
       </div>
     </div>
-
     <div class="header-right">
       <svg id="barcode"></svg>
     </div>
@@ -106,13 +110,9 @@ body{
     <div><b>Total Venta:</b> <span id="totalVenta"></span></div>
   </div>
 
-  <h3>Detalle</h3>
+  <h3 style="margin:6px 0">Detalle</h3>
   <div id="detallePagesContainer" class="detalle-grid"></div>
-</div>
 
-<div class="footer-print">
-  <span id="fechaImpresion"></span>
-  <span class="page-counter"></span>
 </div>
 
 <script>
@@ -141,7 +141,10 @@ Promise.all([
 
   document.getElementById("fecha").textContent=jugada.FECHA;
   document.getElementById("hora").textContent=jugada.HORA;
-  document.getElementById("usuario").textContent=jugada.NOMBREUSUARIO || "";
+  document.getElementById("usuario").textContent=jugada.NOMBREUSUARIO||"";
+
+  document.getElementById("fechaImpresion").textContent=
+    "Impreso: "+new Date().toLocaleString();
 
   JsBarcode("#barcode",id,{displayValue:false});
 
@@ -170,8 +173,6 @@ Promise.all([
 
   document.getElementById("totalNumeros").textContent=filtrados.length;
   document.getElementById("totalVenta").textContent="L "+Math.round(totalVenta);
-  document.getElementById("fechaImpresion").textContent=
-    "Impreso: "+new Date().toLocaleString();
 
   document.getElementById("jugadaCarta").style.display="block";
   setTimeout(()=>window.print(),700);
@@ -179,6 +180,3 @@ Promise.all([
 </script>
 </body>
 </html>
-
-
-
