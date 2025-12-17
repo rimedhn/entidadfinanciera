@@ -8,35 +8,42 @@
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
 <style>
-@page {
+@page{
   size: letter;
-  margin: 0.6in 0.6in 0.9in 0.6in;
+  margin: 0.6in 0.6in 1.2in 0.6in;
 }
 
 body{
   font-family: Arial, sans-serif;
   margin:0;
-  counter-reset: page;
 }
 
-.logo-header{
+.header{
   display:flex;
-  align-items:center;
-  gap:15px;
+  justify-content:space-between;
+  align-items:flex-start;
   margin-bottom:10px;
 }
 
-.logo-header img{ width:90px; }
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.header-left img{ width:90px; }
+
+.header-right{
+  text-align:right;
+}
 
 .info-grid{
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:6px 14px;
   font-size:13px;
   margin-bottom:10px;
 }
-
-.info-grid div b{ color:#333; }
 
 .detalle-grid{
   display:grid;
@@ -57,7 +64,7 @@ body{
 
 .footer-print{
   position:fixed;
-  bottom:0.3in;
+  bottom:0.15in;
   left:0.6in;
   right:0.6in;
   display:flex;
@@ -69,11 +76,6 @@ body{
 .page-counter::after{
   content:"Página " counter(page) " de " counter(pages);
 }
-
-@media print{
-  body{ counter-reset: page; }
-  .page-counter{ counter-increment: page; }
-}
 </style>
 </head>
 
@@ -81,11 +83,17 @@ body{
 
 <div id="jugadaCarta" style="display:none;padding:15px">
 
-  <div class="logo-header">
-    <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true">
-    <div>
-      <h2 style="margin:0">ENTIDAD FINANCIERA</h2>
-      <small>Resumen de Jugada</small>
+  <div class="header">
+    <div class="header-left">
+      <img src="https://github.com/rimedhn/entidadfinanciera/blob/main/Entidad%20Financiera%20Logo.png?raw=true">
+      <div>
+        <h2 style="margin:0">ENTIDAD FINANCIERA</h2>
+        <small>Resumen de Jugada</small>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <svg id="barcode"></svg>
     </div>
   </div>
 
@@ -93,17 +101,13 @@ body{
     <div><b>ID:</b> <span id="idjugada"></span></div>
     <div><b>Fecha:</b> <span id="fecha"></span></div>
     <div><b>Hora:</b> <span id="hora"></span></div>
-
     <div><b>Usuario:</b> <span id="usuario"></span></div>
     <div><b>Total Números:</b> <span id="totalNumeros"></span></div>
     <div><b>Total Venta:</b> <span id="totalVenta"></span></div>
   </div>
 
-  <svg id="barcode"></svg>
-
-  <h3 style="margin:10px 0 6px 0">Detalle</h3>
+  <h3>Detalle</h3>
   <div id="detallePagesContainer" class="detalle-grid"></div>
-
 </div>
 
 <div class="footer-print">
@@ -149,17 +153,14 @@ Promise.all([
     d.ESTADO==="ACTIVO" &&
     equalsUser(d.USUARIO,jugada.USUARIO) &&
     (!d.VENTA||ventasMap.get(d.VENTA)==="ACTIVO")
-  ).sort((a,b)=>{
-    const na=parseInt(a.NUMERO),nb=parseInt(b.NUMERO);
-    return (!isNaN(na)&&!isNaN(nb))?na-nb:a.NUMERO.localeCompare(b.NUMERO);
-  });
+  ).sort((a,b)=>parseInt(a.NUMERO)-parseInt(b.NUMERO));
 
   let totalVenta=0;
   const cont=document.getElementById("detallePagesContainer");
 
   filtrados.forEach(d=>{
-    const val=parseFloat(d.VALOR);
-    totalVenta+=isNaN(val)?0:val;
+    const val=parseFloat(d.VALOR)||0;
+    totalVenta+=val;
     cont.innerHTML+=`
       <div class="detalle-card">
         <div class="numero">#${d.NUMERO}</div>
@@ -178,5 +179,6 @@ Promise.all([
 </script>
 </body>
 </html>
+
 
 
